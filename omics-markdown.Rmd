@@ -15,3 +15,39 @@ Steps:
 
 1. import and early explore data
 2. then, see what analyses we can do
+
+
+Do some analysis of the metadata:
+
+ - species
+ - latitude/longitude
+ - distribution over counties
+
+``` {r metadata}
+
+
+
+```
+
+
+genomic analysis
+
+ - phyloseq?
+ 
+```{r genomics}
+library(phyloseq)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
