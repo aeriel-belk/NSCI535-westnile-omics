@@ -10,3 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 This is an R-markdown we can use!!
+
+Steps: 
+
+1. import and early explore data
+2. then, see what analyses we can do
