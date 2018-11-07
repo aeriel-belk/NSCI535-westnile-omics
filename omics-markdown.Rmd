@@ -1,6 +1,6 @@
 ---
 title: "‘Omics Project"
-author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, Kyle Root "
+author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, Kyle Root"
 date: "11/7/2018"
 output: html_document
 ---
