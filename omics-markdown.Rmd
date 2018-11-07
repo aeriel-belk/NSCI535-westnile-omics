@@ -15,3 +15,10 @@ Steps:
 
 1. import and early explore data
 2. then, see what analyses we can do
+
+
+```{r}
+library(readr)
+wn_meta<- read.csv("metadata/metadata.csv")
+```
+
