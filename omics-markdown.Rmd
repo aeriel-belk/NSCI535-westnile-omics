@@ -23,7 +23,7 @@ wn_meta<- read.csv("metadata/metadata.csv")
  
 
 Ideas for us to look at. 
-Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
+Aeriel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: sf plot to use lat-long data and group smilar sequences by region
 Rebecca: Landscape genetics approach to look at how the landscape affects genetic structure or rate of gene flow. 
@@ -81,6 +81,8 @@ test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946
 fasta <- map(.x = files, 
              .f = read.fasta,
              as.string = TRUE, forceDNAtolower = FALSE)
+
+
 
 ```
 
