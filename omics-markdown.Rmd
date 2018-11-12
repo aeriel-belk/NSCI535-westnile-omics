@@ -40,6 +40,7 @@ library(seqinr)
 library(purrr)
 library(dplyr)
 library(readr)
+library(phyloseq)
 
 ```
 
@@ -76,9 +77,10 @@ files <- list.files(path = 'consensus_sequences', full.names = TRUE)
 
 test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", as.string = TRUE, forceDNAtolower = FALSE)
 
-fasta <- map(.x = files,
-             .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE), 
+fasta <- map(.x = files, .f = read.fasta, 
              as.string = TRUE, forceDNAtolower = FALSE)
+
+fasta[[1]]
 
 
 ```
