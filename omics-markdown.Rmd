@@ -26,7 +26,7 @@ Ideas for us to look at.
 Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: sf plot to use lat-long data and group smilar sequences by region
-Rebecca: Landscape genetics approach to look at how the landscape affects genetic structure or rate of gene flow. 
+Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). 
 
 
 Do some analysis of the metadata:
@@ -79,8 +79,9 @@ test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946
                    forceDNAtolower = FALSE)
 
 fasta <- map(.x = files, 
-             .f = read.fasta,
-             as.string = TRUE, forceDNAtolower = FALSE)
+                .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
+                col_types = cols(.default = "c")) %>% 
+  bind_rows()
 
 ```
 
