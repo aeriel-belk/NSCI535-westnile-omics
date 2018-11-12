@@ -79,9 +79,8 @@ test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946
                    forceDNAtolower = FALSE)
 
 fasta <- map(.x = files, 
-                .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
-                col_types = cols(.default = "c")) %>% 
-  bind_rows()
+             .f = read.fasta,
+             as.string = TRUE, forceDNAtolower = FALSE)
 
 ```
 
