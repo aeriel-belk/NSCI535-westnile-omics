@@ -24,8 +24,8 @@ Do some analysis of the metadata:
  - distribution over counties
 
 ``` {r metadata}
-
-
+library(seqinr)
+read.fasta()
 
 ```
 
