@@ -29,8 +29,8 @@ library(seqinr)
 ```
 
 ``` {r metadata}
-
-
+library(seqinr)
+read.fasta()
 
 ```
 
