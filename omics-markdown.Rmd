@@ -16,7 +16,6 @@ Steps:
 1. import and early explore data
 2. then, see what analyses we can do
 
-
 ```{r}
 library(readr)
 wn_meta<- read.csv("metadata/metadata.csv")
@@ -28,3 +27,27 @@ Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at diverge
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: 
 Rebecca: Landscape genetics approach to look at how the landscape affects genetic structure or rate of gene flow. 
+
+
+Do some analysis of the metadata:
+
+ - species
+ - latitude/longitude
+ - distribution over counties
+
+``` {r metadata}
+
+
+
+```
+
+
+genomic analysis
+
+ - phyloseq?
+ 
+```{r genomics}
+library(phyloseq)
+
+
+```
