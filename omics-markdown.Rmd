@@ -25,12 +25,15 @@ Do some analysis of the metadata:
  
 ```{r libraries}
 library(seqinr)
+library(purrr)
+library(dplyr)
+library(readr)
 
 ```
 
 ``` {r metadata}
-library(seqinr)
-read.fasta()
+
+
 
 ```
 
@@ -58,12 +61,15 @@ files <- list.files(path = 'consensus_sequences', full.names = TRUE)
 
 #2) make map function to read in fasta files
 
-read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa",
-           as.string = TRUE,
-           forceDNAtolower = FALSE)
+test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", 
+                   as.string = TRUE, 
+                   forceDNAtolower = FALSE)
 
-fasta <- mapply(read.fasta())
-?mapply()
+fasta <- map(.x = files, 
+                .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
+                col_types = cols(.default = "c")) %>% 
+  bind_rows()
+
 ```
 
 
