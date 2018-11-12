@@ -22,6 +22,11 @@ Do some analysis of the metadata:
  - species
  - latitude/longitude
  - distribution over counties
+ 
+```{r libraries}
+library(seqinr)
+
+```
 
 ``` {r metadata}
 
@@ -36,10 +41,6 @@ genomic analysis
  
 ```{r genomics}
 library(phyloseq)
-library(readbulk)
-
-read_bulk()
-
 
 ```
 
@@ -50,6 +51,20 @@ steps to read in:
 3) result should be a long list
 
 seqinr -> read.fasta
+
+```{r read-in}
+#1) list files into vector
+files <- list.files(path = 'consensus_sequences', full.names = TRUE)
+
+#2) make map function to read in fasta files
+
+read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa",
+           as.string = TRUE,
+           forceDNAtolower = FALSE)
+
+fasta <- mapply(read.fasta())
+?mapply()
+```
 
 
 
