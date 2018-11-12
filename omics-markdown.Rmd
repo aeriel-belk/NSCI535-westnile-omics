@@ -36,12 +36,20 @@ genomic analysis
  
 ```{r genomics}
 library(phyloseq)
+library(readbulk)
+
+read_bulk()
 
 
 ```
 
 
+steps to read in:
+1) list.files with full names option to get names of all files in folder, save in object (char vector)
+2) pipe that vector into map function that does read.fasta (play around with just the first file first)
+3) result should be a long list
 
+seqinr -> read.fasta
 
 
 
