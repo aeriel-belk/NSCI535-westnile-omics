@@ -16,6 +16,18 @@ Steps:
 1. import and early explore data
 2. then, see what analyses we can do
 
+```{r}
+library(readr)
+wn_meta<- read.csv("metadata/metadata.csv")
+```
+ 
+
+Ideas for us to look at. 
+Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
+Kyle:Compare genetic viersity between host species and vecotr species
+Amanda: 
+Rebecca: Landscape genetics approach to look at how the landscape affects genetic structure or rate of gene flow. 
+
 
 Do some analysis of the metadata:
 
@@ -48,6 +60,7 @@ library(phyloseq)
 ```
 
 
+
 steps to read in:
 1) list.files with full names option to get names of all files in folder, save in object (char vector)
 2) pipe that vector into map function that does read.fasta (play around with just the first file first)
@@ -71,9 +84,6 @@ fasta <- map(.x = files,
   bind_rows()
 
 ```
-
-
-
 
 
 
