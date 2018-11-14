@@ -23,7 +23,7 @@ wn_meta<- read.csv("metadata/metadata.csv")
  
 
 Ideas for us to look at. 
-Aeriel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
+Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: sf plot to use lat-long data and group smilar sequences by region
 Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). 
@@ -31,9 +31,10 @@ Rebecca: Landscape genetics approach to look at how the urban vs. rural affects 
 
 Do some analysis of the metadata:
 
- - species
+ - species 
  - latitude/longitude
  - distribution over counties
+ - sequence similarities/ density by region
  
 ```{r libraries, message=FALSE, warning=FALSE}
 library(seqinr)
@@ -51,22 +52,17 @@ library(Biostrings)
 ```
 
 ``` {r metadata}
+metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
 
-
+metadataframe <- read_csv(metadata_url)
 
 ```
 
-
-genomic analysis
-
- - phyloseq?
  
 ```{r genomics}
 
 
 ```
-
-
 
 steps to read in:
 1) list.files with full names option to get names of all files in folder, save in object (char vector)
@@ -80,6 +76,15 @@ seqinr -> read.fasta
 files <- list.files(path = 'consensus_sequences', full.names = TRUE)
 
 #2) make map function to read in fasta files
+
+test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", 
+                   as.string = TRUE, 
+                   forceDNAtolower = FALSE)
+
+fasta <- map(.x = files, 
+                .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
+                col_types = cols(.default = "c")) %>% 
+  bind_rows()
 
 test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", as.string = TRUE, forceDNAtolower = FALSE)
 
