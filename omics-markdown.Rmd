@@ -48,7 +48,6 @@ library(phyloseq)
 # BiocManager::install("Biostrings", version = "3.8")
 library(Biostrings)
 
-
 ```
 
 ``` {r metadata}
@@ -97,15 +96,15 @@ writeXStringSet(fasta2, 'consensus-seqs.fna')
 #writeXStringSet(LargeDNAStringSet, 'fname.fa')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
 
-
-head(fasta2)
 ```
 
-qiime tools import \
-  --input-path consensus-seqs.fna \
-  --output-path sequences.qza \
-  --type 'FeatureData[Sequence]'
+  After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
+```{r biostring}
+
+
+
+```
 
 
 
