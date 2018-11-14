@@ -101,7 +101,10 @@ writeXStringSet(fasta2, 'consensus-seqs.fna')
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
 ```{r biostring}
+sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
+clust <- hclust(fasta2, method = "single")
 
+sdist <- stringDist()
 
 
 ```
