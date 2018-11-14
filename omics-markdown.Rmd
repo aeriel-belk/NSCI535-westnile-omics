@@ -35,12 +35,18 @@ Do some analysis of the metadata:
  - latitude/longitude
  - distribution over counties
  
-```{r libraries}
+```{r libraries, message=FALSE, warning=FALSE}
 library(seqinr)
 library(purrr)
 library(dplyr)
 library(readr)
 library(phyloseq)
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+# BiocManager::install("Biostrings", version = "3.8")
+library(Biostrings)
+
 
 ```
 
@@ -56,7 +62,7 @@ genomic analysis
  - phyloseq?
  
 ```{r genomics}
-library(phyloseq)
+
 
 ```
 
@@ -80,12 +86,21 @@ test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946
 fasta <- map(.x = files, .f = read.fasta, 
              as.string = TRUE, forceDNAtolower = FALSE)
 
-fasta[[1]]
+fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
+
+writeXStringSet(fasta2, 'consensus-seqs.fna')
+#writeXStringSet(LargeDNAStringSet, 'fname.fa')
+#write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
 
 
+head(fasta2)
 ```
 
-
+qiime tools import \
+  --input-path consensus-seqs.fna \
+  --output-path sequences.qza \
+  --type 'FeatureData[Sequence]'
+  
 
 
 
