@@ -95,7 +95,10 @@ writeXStringSet(fasta2, 'consensus-seqs.fna')
   
 Using BioStrings (https://bioconductor.org/packages/release/bioc/html/Biostrings.html) to align sequences so we can compare across samples. Plan is to align, then try to cluster the sequences into groups based on similarity. This will allow us to build trees, which we can try to apply to Amanda and Rebecca's analyses of season and population, as well as host species.
   
+```{r biostrings}
 
+
+```
 
 ********************************************************************************
 
