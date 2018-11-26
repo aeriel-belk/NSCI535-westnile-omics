@@ -37,12 +37,17 @@ Do some analysis of the metadata:
  - distribution over counties
  - sequence similarities/ density by region
  
-```{r libraries}
+```{r libraries, message=FALSE, warning=FALSE}
 library(seqinr)
 library(purrr)
 library(dplyr)
 library(readr)
 library(phyloseq)
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+# BiocManager::install("Biostrings", version = "3.8")
+library(Biostrings)
 
 ```
 
@@ -57,7 +62,7 @@ metadataframe <- metadataframe%>%
 
  
 ```{r genomics}
-library(phyloseq)
+
 
 ```
 
@@ -82,13 +87,24 @@ fasta <- map(.x = files,
                 .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
                 col_types = cols(.default = "c")) %>% 
   bind_rows()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", as.string = TRUE, forceDNAtolower = FALSE)
 
 fasta <- map(.x = files, .f = read.fasta, 
              as.string = TRUE, forceDNAtolower = FALSE)
 
-fasta[[1]]
+fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
 
+<<<<<<< HEAD
+=======
+writeXStringSet(fasta2, 'consensus-seqs.fna')
+#writeXStringSet(LargeDNAStringSet, 'fname.fa')
+#write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
+
+>>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 ```
 *Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
 ```{r mapped_plot}
@@ -98,6 +114,18 @@ ca_wnv <- metadataframe %>%
   rename_all(funs(str_replace(., "\\s", "_")))
   
 
+<<<<<<< HEAD
+=======
+  After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
+  
+```{r biostring}
+sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
+clust <- hclust(fasta2, method = "single")
+
+sdist <- stringDist()
+
+
+>>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 ```
 
 
