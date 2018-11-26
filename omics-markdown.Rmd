@@ -18,6 +18,7 @@ Steps:
 
 ```{r}
 library(readr)
+library(stringr)
 wn_meta<- read.csv("metadata/metadata.csv")
 ```
  
@@ -42,6 +43,9 @@ library(purrr)
 library(dplyr)
 library(readr)
 library(phyloseq)
+library(stringr)
+library(tidyr)
+library(lubridate)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -54,7 +58,8 @@ library(Biostrings)
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
 
 metadataframe <- read_csv(metadata_url)
-
+metadataframe <- metadataframe%>% 
+  rename_all(tolower)
 ```
 
  
@@ -83,9 +88,21 @@ fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.
 writeXStringSet(fasta2, 'consensus-seqs.fna')
 #writeXStringSet(LargeDNAStringSet, 'fname.fa')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
-
 ```
 
+*Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
+
+```{r mapped_plot}
+ca_wnv <- metadataframe %>% 
+  select("species", "sample type", "collection date",
+           "county", "latitude", "longitude") %>% 
+  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
+  mutate(collection_date = mdy(collection_date)) %>% 
+  separate(col = collection_date, 
+           into = c("year", "month", "day"),
+           sep = "-")
+  
+```
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
 ```{r biostring}
