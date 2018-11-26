@@ -43,6 +43,9 @@ library(purrr)
 library(dplyr)
 library(readr)
 library(phyloseq)
+library(stringr)
+library(tidyr)
+library(lubridate)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -57,7 +60,6 @@ metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-we
 metadataframe <- read_csv(metadata_url)
 metadataframe <- metadataframe%>% 
   rename_all(tolower)
-
 ```
 
  
@@ -87,10 +89,7 @@ fasta <- map(.x = files,
                 .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
                 col_types = cols(.default = "c")) %>% 
   bind_rows()
-<<<<<<< HEAD
-=======
 
->>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", as.string = TRUE, forceDNAtolower = FALSE)
 
 fasta <- map(.x = files, .f = read.fasta, 
@@ -98,24 +97,24 @@ fasta <- map(.x = files, .f = read.fasta,
 
 fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
 
-<<<<<<< HEAD
-=======
 writeXStringSet(fasta2, 'consensus-seqs.fna')
 #writeXStringSet(LargeDNAStringSet, 'fname.fa')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
-
->>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 ```
+
 *Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
+
 ```{r mapped_plot}
 ca_wnv <- metadataframe %>% 
   select("species", "sample type", "collection date",
            "county", "latitude", "longitude") %>% 
-  rename_all(funs(str_replace(., "\\s", "_")))
+  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
+  mutate(collection_date = mdy(collection_date)) %>% 
+  separate(col = collection_date, 
+           into = c("year", "month", "day"),
+           sep = "-")
   
-
-<<<<<<< HEAD
-=======
+```
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
 ```{r biostring}
@@ -125,7 +124,6 @@ clust <- hclust(fasta2, method = "single")
 sdist <- stringDist()
 
 
->>>>>>> 3eb2b1b94365de6169df04f755cbb7896d07393c
 ```
 
 
