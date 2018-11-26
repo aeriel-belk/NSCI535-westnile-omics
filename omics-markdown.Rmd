@@ -26,7 +26,7 @@ Ideas for us to look at.
 Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: sf plot to use lat-long data and group smilar sequences by region
-Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). 
+Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). Maybe use popualtion density in each county as a proxy for urbanization.  
 
 
 Do some analysis of the metadata:
@@ -45,7 +45,8 @@ library(phyloseq)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
-# BiocManager::install("Biostrings", version = "3.8")
+# BiocManager::install("Biostrings", versilibrary(devtools)
+on = "3.8")
 library(Biostrings)
 
 ```
@@ -109,6 +110,13 @@ sdist <- stringDist()
 
 ```
 
+```{r}
+library(tidyr)
+library(tidycensus) ##tidycencus package
+
+census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
+ca_pop <- 
+```
 
 
 
