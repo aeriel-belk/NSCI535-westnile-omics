@@ -18,12 +18,13 @@ Steps:
 
 ```{r}
 library(readr)
+library(stringr)
 wn_meta<- read.csv("metadata/metadata.csv")
 ```
  
 
 Ideas for us to look at. 
-Ariel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
+Aeriel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
 Amanda: sf plot to use lat-long data and group smilar sequences by region
 Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). Maybe use popualtion density in each county as a proxy for urbanization.  
@@ -42,6 +43,9 @@ library(purrr)
 library(dplyr)
 library(readr)
 library(phyloseq)
+library(stringr)
+library(tidyr)
+library(lubridate)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -55,7 +59,8 @@ library(Biostrings)
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
 
 metadataframe <- read_csv(metadata_url)
-
+metadataframe <- metadataframe%>% 
+  rename_all(tolower)
 ```
 
  
@@ -76,29 +81,41 @@ seqinr -> read.fasta
 files <- list.files(path = 'consensus_sequences', full.names = TRUE)
 
 #2) make map function to read in fasta files
-
-test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", 
-                   as.string = TRUE, 
-                   forceDNAtolower = FALSE)
-
-fasta <- map(.x = files, 
-                .f = read.fasta(as.string = TRUE, forceDNAtolower = FALSE),
-                col_types = cols(.default = "c")) %>% 
-  bind_rows()
-
-test <- read.fasta("consensus_sequences/W006_2013-07-10_USA_CA_SanDiego_-116.946_32.885.fa", as.string = TRUE, forceDNAtolower = FALSE)
-
-fasta <- map(.x = files, .f = read.fasta, 
-             as.string = TRUE, forceDNAtolower = FALSE)
+#fasta <- map(.x = files, .f = read.fasta, 
+#             as.string = TRUE, forceDNAtolower = FALSE)
 
 fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
 
 writeXStringSet(fasta2, 'consensus-seqs.fna')
 #writeXStringSet(LargeDNAStringSet, 'fname.fa')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
+```
+
+
+### Align Sequences
+  
+Using BioStrings (https://bioconductor.org/packages/release/bioc/html/Biostrings.html) to align sequences so we can compare across samples. Plan is to align, then try to cluster the sequences into groups based on similarity. This will allow us to build trees, which we can try to apply to Amanda and Rebecca's analyses of season and population, as well as host species.
+  
+```{r biostrings}
+
 
 ```
 
+********************************************************************************
+
+*Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
+
+```{r mapped_plot}
+ca_wnv <- metadataframe %>% 
+  select("species", "sample type", "collection date",
+           "county", "latitude", "longitude") %>% 
+  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
+  mutate(collection_date = mdy(collection_date)) %>% 
+  separate(col = collection_date, 
+           into = c("year", "month", "day"),
+           sep = "-")
+  
+```
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
 ```{r biostring}
