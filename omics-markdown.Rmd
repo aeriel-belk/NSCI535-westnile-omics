@@ -53,9 +53,14 @@ library(ggplot2)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
-# BiocManager::install("Biostrings", versilibrary(devtools)
-on = "3.8"
+# BiocManager::install("Biostrings", versilibrary(devtools) on = "3.8"
 library(Biostrings)
+
+if (!requireNamespace("BiocManager", quietly=TRUE))
+install.packages("BiocManager")
+BiocManager::install("msa")
+
+library(msa)
 
 ```
 
@@ -89,6 +94,7 @@ fasta2 <- readDNAStringSet(files, format="fasta", nrec=-1L, skip=0L, seek.first.
 writeXStringSet(fasta2, 'consensus-seqs.fna')
 #writeXStringSet(LargeDNAStringSet, 'fname.fa')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
+
 ```
 
 *******************************************************************************
@@ -97,18 +103,24 @@ writeXStringSet(fasta2, 'consensus-seqs.fna')
   
 Using BioStrings (https://bioconductor.org/packages/release/bioc/html/Biostrings.html) to align sequences so we can compare across samples. Plan is to align, then try to cluster the sequences into groups based on similarity. This will allow us to build trees, which we can try to apply to Amanda and Rebecca's analyses of season and population, as well as host species.
   
-```{r biostrings}
-
-
-```
-  
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
 ```{r biostring, eval=FALSE}
-sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
-clust <- hclust(fasta2, method = "single")
+#sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
+#clust <- hclust(fasta2, method = "single")
 
-sdist <- stringDist()
+#sdist <- stringDist()
+
+### 11-28-18, ADB ###
+
+aligned <- DNAMultipleAlignment(fasta2)
+# unequal number of characters error
+
+aligned2 <- readDNAMultipleAlignment('consensus_sequences', 'fasta')
+# got output with 0 rows, but a start!
+
+
+
 
 
 ```
