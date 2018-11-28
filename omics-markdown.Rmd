@@ -145,10 +145,12 @@ sdist <- stringDist()
 ```
 
 ```{r}
+#### Rebecca trying to make life easier by using census data per county as a proxy for urbanization
 library(tidyr)
-library(tidycensus) ##tidycencus package
+library(tidycensus) ##tidycensus package
 
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
+
 
 ```
 
