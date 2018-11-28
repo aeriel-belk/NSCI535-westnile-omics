@@ -47,6 +47,8 @@ library(stringr)
 library(tidyr)
 library(lubridate)
 library(forcats)
+library(tigris)
+library(knitr)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -107,6 +109,8 @@ Using BioStrings (https://bioconductor.org/packages/release/bioc/html/Biostrings
 *Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
 
 ```{r mapped_plot}
+
+#Tidy data for county map with infections by season
 ca_wnv <- metadataframe %>% 
   select("species", "collection date",
            "county", "latitude", "longitude") %>% 
@@ -120,7 +124,14 @@ ca_wnv <- metadataframe %>%
                spring = c("3", "4", "5"),
                summer = c("6", "7", "8"),
                fall = c("9", "10", "11")))
-  
+
+season_summary <- ca_wnv %>% 
+  group_by(season) %>% 
+  summarize(no_infections = n())
+kable(season_summary)
+
+#Creating CA sf boundaries
+
 ```
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
