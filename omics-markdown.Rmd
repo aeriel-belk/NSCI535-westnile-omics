@@ -147,13 +147,49 @@ ggplot() +
 ```
   
 ********************************************************************************
-  
+*Rebecca making a map to look at urbaization and WNV genetic structure*
+
+Trying to relate the virus's genetic structure to urbanization. Since the data doesn't provide a real gradient of 'urbanization' we will use human popualtion density as a proxy
 ```{r}
 #### Rebecca trying to make life easier by using census data per county as a proxy for urbanization
-library(tidyr)
+library(tidyverse)
 library(tidycensus) ##tidycensus package
+library(leaflet)
+library(stringr)
+library(sf)
+library(adegenet)
+library(pegas)
 
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
+
+ca_pop <- get_acs(geography = "county", 
+                     variables = "B01003_001", 
+                     state = "CA",
+                     geometry = TRUE) 
+
+ca_pop
+
+
+pal <- colorQuantile(palette = "viridis", domain = ca_pop$estimate, n = 5)
+
+ca_density <- ca_pop %>%
+    st_transform(crs = "+init=epsg:4326") %>%
+    leaflet(width = "100%") %>%
+    addProviderTiles(provider = "CartoDB.Positron") %>%
+    addPolygons(popup = ~ str_extract(NAME, "^([^,]*)"),
+                stroke = FALSE,
+                smoothFactor = 0,
+                fillOpacity = 0.7,
+                color = ~ pal(estimate)) %>%
+    addLegend("bottomright", 
+              pal = pal, 
+              values = ~ estimate,
+              title = "Population Percentiles",
+              opacity = 1)
+
+ca_density
+
+dna <- ape::read.dna(fasta) ##ape supposedly can read in FASTA files, but fna might not be the same thing 
 
 
 ```
