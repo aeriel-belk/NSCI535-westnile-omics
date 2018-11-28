@@ -50,6 +50,7 @@ library(forcats)
 library(tigris)
 library(knitr)
 library(ggplot2)
+library(sf)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -133,7 +134,13 @@ ca_wnv <- metadataframe %>%
                winter = c("12", "1", "2"),
                spring = c("3", "4", "5"),
                summer = c("6", "7", "8"),
-               fall = c("9", "10", "11")))
+               fall = c("9", "10", "11"))) %>% 
+  mutate(latitude = as.double(latitude)) %>% 
+  mutate(longitude = as.double(longitude))
+
+ca_wnv_sf <- st_as_sf(ca_wnv, 
+                      coords = c("latitude", "longitude"),
+                      crs = 3310)
 
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
@@ -143,7 +150,11 @@ kable(season_summary)
 #Creating CA sf boundaries
 ca_counties <- counties(state = "CA", cb = TRUE, class = "sf")
 ggplot() +
-  geom_sf(data = ca_counties)
+  geom_sf(data = ca_counties, aes(fill = AWATER)) +
+  scale_fill_viridis_c(name = "Water area") +
+  facet_wrap(~ season, ncol = 4)
+
+
 ```
   
 ********************************************************************************
