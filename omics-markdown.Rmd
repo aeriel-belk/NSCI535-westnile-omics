@@ -54,7 +54,7 @@ library(ggplot2)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
 # BiocManager::install("Biostrings", versilibrary(devtools)
-on = "3.8"
+#on = "3.8"
 library(Biostrings)
 
 ```
@@ -194,5 +194,10 @@ dna <- ape::read.dna(fasta) ##ape supposedly can read in FASTA files, but fna mi
 
 ```
 
+********************************************************************************
+*Kyle tentatively comparing variation in sequences within a host species*
+Potential packages:
+Biostrings for alignment and organization
+jasonedit-list viewer interactive
 
 
