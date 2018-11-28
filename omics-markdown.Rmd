@@ -49,6 +49,7 @@ library(lubridate)
 library(forcats)
 library(tigris)
 library(knitr)
+library(ggplot2)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -131,7 +132,9 @@ season_summary <- ca_wnv %>%
 kable(season_summary)
 
 #Creating CA sf boundaries
-
+ca_counties <- counties(state = "CA", cb = TRUE, class = "sf")
+ggplot() +
+  geom_sf(data = ca_counties)
 ```
   After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
