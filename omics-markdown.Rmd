@@ -54,7 +54,7 @@ library(ggplot2)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
 # BiocManager::install("Biostrings", versilibrary(devtools)
-on = "3.8"
+#on = "3.8"
 library(Biostrings)
 
 ```
@@ -158,5 +158,10 @@ census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
 
 ```
 
+********************************************************************************
+*Kyle tentatively comparing variation in sequences within a host species*
+Potential packages:
+Biostrings for alignment and organization
+jasonedit-list viewer interactive
 
 
