@@ -68,11 +68,6 @@ metadataframe <- metadataframe%>%
 
 ```
 
- 
-```{r genomics}
-
-
-```
 
 steps to read in:
 1) list.files with full names option to get names of all files in folder, save in object (char vector)
@@ -96,6 +91,7 @@ writeXStringSet(fasta2, 'consensus-seqs.fna')
 #write.fasta(sequences, names, file.out, open = "w", nbchar = 60, as.string = FALSE)
 ```
 
+*******************************************************************************
 
 ### Align Sequences
   
@@ -105,8 +101,21 @@ Using BioStrings (https://bioconductor.org/packages/release/bioc/html/Biostrings
 
 
 ```
+  
+  After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
+  
+```{r biostring, eval=FALSE}
+sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
+clust <- hclust(fasta2, method = "single")
+
+sdist <- stringDist()
 
 
+```
+  
+  
+********************************************************************************
+  
 *Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
 
 ```{r mapped_plot}
@@ -136,17 +145,9 @@ ca_counties <- counties(state = "CA", cb = TRUE, class = "sf")
 ggplot() +
   geom_sf(data = ca_counties)
 ```
-  After getting it important and *roughly* in a usable format, I tried doing some alignment and clustering with the biostrings package
   
-```{r biostring, eval=FALSE}
-sdist <- stringDist(as(fasta2,"DNAStringSet"), method="hamming")
-clust <- hclust(fasta2, method = "single")
-
-sdist <- stringDist()
-
-
-```
-
+********************************************************************************
+  
 ```{r}
 #### Rebecca trying to make life easier by using census data per county as a proxy for urbanization
 library(tidyr)
