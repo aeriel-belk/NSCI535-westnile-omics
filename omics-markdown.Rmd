@@ -150,7 +150,8 @@ ca_wnv <- metadataframe %>%
                fall = c("9", "10", "11"))) %>% 
   mutate(latitude = as.double(latitude)) %>% 
   mutate(longitude = as.double(longitude)) %>% 
-  group_by(latitude)
+  group_by(latitude) %>% 
+  na.omit()
 
 ca_wnv_sf <- st_as_sf(ca_wnv, 
                       coords = c("latitude", "longitude"),
