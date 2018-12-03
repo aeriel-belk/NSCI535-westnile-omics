@@ -177,6 +177,7 @@ ggplot() +
 
 Trying to relate the virus's genetic structure to urbanization. Since the data doesn't provide a real gradient of 'urbanization' we will use human popualtion density as a proxy
 ```{r}
+####Human population density map bit##
 #### Rebecca trying to make life easier by using census data per county as a proxy for urbanization
 library(tidyverse)
 library(tidycensus) ##tidycensus package
@@ -185,6 +186,11 @@ library(stringr)
 library(sf)
 library(adegenet)
 library(pegas)
+library(Biostrings)
+library(dplyr)
+library(seqinr)
+library(ape)
+library(ShortRead)
 
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
 
@@ -215,9 +221,59 @@ ca_density <- ca_pop %>%
 
 ca_density
 
-dna <- ape::read.dna(fasta) ##ape supposedly can read in FASTA files, but fna might not be the same thing 
 
 
+######################################################
+
+#Genomics bit#
+#read in the data using bioStrings package
+cons_seq <- readDNAStringSet("consensus-seqs.fna")
+
+#number of occurances of each character
+alphabetFrequency(cons_seq, baseOnly=TRUE, collapse=TRUE) #total 
+#      A       C       G       T   other 
+#1847658 1495638 1935723 1460705  342960 
+
+
+freqs <- alphabetFrequency(DNAStringSet(cons_seq[!is.na(cons_seq)]), baseOnly=TRUE) #by sequence
+head(freqs)
+
+writeXStringSet(cons_seq,file="wnv_fasta.fas",format="fasta")
+
+
+##DECIPHER package for sequence alignment  
+library(DECIPHER)
+dna <- unique(cons_seq) # the unique input sequences
+index <- match(cons_seq, u_dna) # de-replication index
+aligned_seq <- AlignSeqs(cons_seq) # align the sequences directly without translation
+aligned_seq <- U_DNA[index]
+names(cons_seq) <- names(cons_seq) # the re-replicated alignment
+head(aligned_seq)
+
+#Post processing 
+BrowseSeqs(aligned_seq, highlight=0) #visualize sequences in internet browser
+
+wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" apparently 
+
+writeXStringSet(wnv_adjusted,file="wnv_adjusted.fas",format="fasta")
+
+#use shortread to trim off the ends of the data where there are a lot of missing values 
+wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
+wnv_clean
+writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta")
+
+#use pegas to build a haplotype network
+input <- "wnv_clean.fas"
+fasta.read <- ape::read.dna(input, format='fasta')
+distance_wnv <- dist.dna(fasta.read)
+wnv_hap <- pegas::haplotype(fasta.read)
+wnv_hap <- sort(wnv_hap, what = "label")
+(net <- pegas::haploNet(wnv_hap))
+ind.hap <-with(stack(setNames(attr(wnv_hap, "index"), rownames(wnv_hap))),
+table(hap=ind, pop=rownames(fasta.read)[values])
+)
+plot(net, size=attr(net, "freq"), scale.ratio=0.2, pie=ind.hap)
+legend(-8, 0, colnames(ind.hap), col=rainbow(ncol(ind.hap)), pch=19, ncol=2)
 ```
 
 ********************************************************************************
