@@ -253,14 +253,24 @@ head(aligned_seq)
 #Post processing 
 BrowseSeqs(aligned_seq, highlight=0) #visualize sequences in internet browser
 
-wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" apparently 
+wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" 
 
 writeXStringSet(wnv_adjusted,file="wnv_adjusted.fas",format="fasta")
 
 #use shortread to trim off the ends of the data where there are a lot of missing values 
 wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
 wnv_clean
+BrowseSeqs(wnv_clean, highlight=0)
+
 writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta")
+
+#Play with stratag package to filter poor reads using gtypes objects 
+
+library(strataG)
+wnv_gtype <- system.file("wnv_clean.fas", package = "strataG")
+wnv_gtype <- read.dna(wnv_gtype)
+
+
 
 #use pegas to build a haplotype network
 input <- "wnv_clean.fas"
