@@ -26,7 +26,7 @@ wn_meta<- read.csv("metadata/metadata.csv")
 Ideas for us to look at. 
 Aeriel: Build a phylogenetic tree using Bioconductor(phyloseq) to look at divergence and host species
 Kyle:Compare genetic viersity between host species and vecotr species
-Amanda: sf plot to use lat-long data and group smilar sequences by region
+Amanda: sf plot to use lat-long data and group by infected species by region by season
 Rebecca: Landscape genetics approach to look at how the urban vs. rural affects genetic structure or rate of gene flow (see https://doi.org/10.1111/mec.14783). Maybe use popualtion density in each county as a proxy for urbanization.  
 
 
@@ -148,14 +148,20 @@ ca_wnv <- metadataframe %>%
                spring = c("3", "4", "5"),
                summer = c("6", "7", "8"),
                fall = c("9", "10", "11"))) %>% 
-  mutate(latitude = as.double(latitude)) %>% 
-  mutate(longitude = as.double(longitude)) %>% 
-  group_by(latitude) %>% 
-  na.omit()
+  mutate(latitude = as.numeric(latitude)) %>% 
+  mutate(longitude = as.numeric(longitude)) %>% 
+  na.omit() %>% 
+  mutate(species = fct_lump(species,
+                                n = 4))
+
+species_summary <- ca_wnv %>% 
+  group_by(species) %>% 
+  summarize(species_no = n())
+kable(species_summary)
 
 ca_wnv_sf <- st_as_sf(ca_wnv, 
-                      coords = c("latitude", "longitude"),
-                      crs = 3310)
+                      coords = c("longitude", "latitude"),
+                      crs = 4269)
 
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
@@ -163,12 +169,13 @@ season_summary <- ca_wnv %>%
 kable(season_summary)
 
 #Creating CA sf boundaries
-ca_counties <- counties(state = "CA", cb = TRUE, class = "sf")
+ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
 ggplot() +
-  geom_sf(data = ca_counties, aes(fill = AWATER)) +
-  scale_fill_viridis_c(name = "Water area") +
-  facet_wrap(~ season, ncol = 4)
-
+  geom_sf(data = ca_counties, aes(fill = AWATER),
+          alpha = 0.5) +
+  geom_sf(data = ca_wnv_sf, aes(color = season,
+                                shape = species))
+  scale_fill_viridis_c(name = "Season")
 
 ```
   
