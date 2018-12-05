@@ -174,8 +174,8 @@ ggplot() +
   geom_sf(data = ca_counties, aes(fill = AWATER),
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season,
-                                shape = species))
-  scale_fill_viridis_c(name = "Season")
+                                shape = species)) +
+  scale_fill_viridis_c(name = "Area of Water")
 
 ```
   
