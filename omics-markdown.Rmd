@@ -174,13 +174,24 @@ ggplot() +
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season,
                                 shape = species)) +
-  scale_fill_viridis_c(name = "Area of Water")
+  scale_fill_viridis_c(name = "Area of Water") +
+  facet_wrap(.~season) +
+  ggtitle("California West Nile Virus Infections") +
+  xlab("Longitude") +
+  ylab("Latitude")
 
 #Leaflet graph
+popup_info <- paste0("<b>Species:</b>  ", 
+                                  ca_wnv$species, "<br/>",
+                                  "<b>Season:</b>  ",
+                                  ca_wnv$season)
+
 leaflet() %>% 
-  addTiles() %>% 
-  addMarkers(data = ca_wnv, lng = ~ longitude,
-             lat = ~ latitude)
+  addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addCircleMarkers(data = ca_wnv, radius = 2,
+                   lng = ~ longitude, lat = ~ latitude,
+                   popup = popup_info,
+                   clusterOptions = markerClusterOptions())
 
 ```
   
