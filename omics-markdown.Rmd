@@ -122,10 +122,6 @@ aligned <- DNAMultipleAlignment(fasta2)
 aligned2 <- readDNAMultipleAlignment('consensus_sequences', 'fasta')
 # got output with 0 rows, but a start!
 
-
-
-
-
 ```
   
   
@@ -161,8 +157,10 @@ species_summary <- ca_wnv %>%
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
   summarize(no_infections = n())
-kable(species_summary)
-kable(season_summary)
+kable(species_summary,
+      col.names = c("Species", "Number Infected"))
+kable(season_summary,
+      col.names = c("Season", "Number of Cases"))
 
 #Creating CA sf boundaries
 ca_wnv_sf <- st_as_sf(ca_wnv, 
@@ -177,6 +175,12 @@ ggplot() +
   geom_sf(data = ca_wnv_sf, aes(color = season,
                                 shape = species)) +
   scale_fill_viridis_c(name = "Area of Water")
+
+#Leaflet graph
+leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(data = ca_wnv, lng = ~ longitude,
+             lat = ~ latitude)
 
 ```
   
