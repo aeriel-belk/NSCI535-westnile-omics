@@ -1,7 +1,7 @@
 ---
 title: "‘Omics Project"
 author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, Kyle Root"
-date: "11/27/2018"
+date: "12/5/2018"
 output: html_document
 ---
 
@@ -16,7 +16,7 @@ Steps:
 1. import and early explore data
 2. then, see what analyses we can do
 
-```{r}
+```{r data}
 library(readr)
 library(stringr)
 wn_meta<- read.csv("metadata/metadata.csv")
@@ -51,6 +51,7 @@ library(tigris)
 library(knitr)
 library(ggplot2)
 library(sf)
+library(leaflet)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -66,7 +67,7 @@ library(msa)
 
 ```
 
-``` {r metadata}
+``` {r metadata formatting}
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
 
 metadataframe <- read_csv(metadata_url)
@@ -121,10 +122,6 @@ aligned <- DNAMultipleAlignment(fasta2)
 aligned2 <- readDNAMultipleAlignment('consensus_sequences', 'fasta')
 # got output with 0 rows, but a start!
 
-
-
-
-
 ```
   
   
@@ -157,25 +154,44 @@ ca_wnv <- metadataframe %>%
 species_summary <- ca_wnv %>% 
   group_by(species) %>% 
   summarize(species_no = n())
-kable(species_summary)
-
-ca_wnv_sf <- st_as_sf(ca_wnv, 
-                      coords = c("longitude", "latitude"),
-                      crs = 4269)
-
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
   summarize(no_infections = n())
-kable(season_summary)
+kable(species_summary,
+      col.names = c("Species", "Number Infected"))
+kable(season_summary,
+      col.names = c("Season", "Number of Cases"))
 
 #Creating CA sf boundaries
+ca_wnv_sf <- st_as_sf(ca_wnv, 
+                      coords = c("longitude", "latitude"),
+                      crs = 4269)
 ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
+co_tracts <- tracts(state = 06, cb = TRUE, class = "sf")
+
 ggplot() +
   geom_sf(data = ca_counties, aes(fill = AWATER),
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season,
-                                shape = species))
-  scale_fill_viridis_c(name = "Season")
+                                shape = species)) +
+  scale_fill_viridis_c(name = "Area of Water") +
+  facet_wrap(.~season) +
+  ggtitle("California West Nile Virus Infections") +
+  xlab("Longitude") +
+  ylab("Latitude")
+
+#Leaflet graph
+popup_info <- paste0("<b>Species:</b>  ", 
+                                  ca_wnv$species, "<br/>",
+                                  "<b>Season:</b>  ",
+                                  ca_wnv$season)
+
+leaflet() %>% 
+  addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addCircleMarkers(data = ca_wnv, radius = 2,
+                   lng = ~ longitude, lat = ~ latitude,
+                   popup = popup_info,
+                   clusterOptions = markerClusterOptions())
 
 ```
   
@@ -198,7 +214,6 @@ library(dplyr)
 library(seqinr)
 library(ape)
 library(ShortRead)
-library(PopGenome)
 
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
 
@@ -237,20 +252,20 @@ ca_density
 #In the fasta folder, there are 5 different fasta files. wnv_fasta is the 
 #read in the data using bioStrings package
 cons_seq <- readDNAStringSet("consensus-seqs.fna")
-length(cons_seq[[1]]) #length of first sequence in the multi FASTA file
 
 #number of occurances of each character
 alphabetFrequency(cons_seq, baseOnly=TRUE, collapse=TRUE) #total 
-#      A       C       G       T   other  ##'other' is N or unknown/any nt character 
+#      A       C       G       T   other 
 #1847658 1495638 1935723 1460705  342960 
 
 
-freqs <- alphabetFrequency(DNAStringSet(cons_seq[!is.na(cons_seq)]), baseOnly=TRUE) # number of bases by sequence 
+freqs <- alphabetFrequency(DNAStringSet(cons_seq[!is.na(cons_seq)]), baseOnly=TRUE) #by sequence
 head(freqs)
-# serious amount of variation in number of Ns in each sequence. Sequencing error with poor quality samples?
+
+writeXStringSet(cons_seq,file="wnv_fasta.fas",format="fasta")
 
 
-##DECIPHER package for aligning raw sequences to eachother based on similarity
+##DECIPHER package for sequence alignment  
 library(DECIPHER)
 dna <- unique(cons_seq) # the unique input sequences
 index <- match(cons_seq, u_dna) # de-replication index
@@ -262,41 +277,33 @@ head(aligned_seq)
 #Post processing 
 BrowseSeqs(aligned_seq, highlight=0) #visualize sequences in internet browser
 
-wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" 
+wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" apparently 
 
-writeXStringSet(wnv_adjusted,file="fasta/wnv_adjusted.fas",format="fasta") ## write aligned sequence DNAstringset to fasta
+writeXStringSet(wnv_adjusted,file="wnv_adjusted.fas",format="fasta")
 
-#use ShortRead package to trim off the ends from base # 31-10963 of the data where there are a lot of missing values.  
-wnv_clean <- DNAStringSet(substr('fasta/wnv_adjusted',31,10963))
-wnv_clean 
-BrowseSeqs(wnv_clean, highlight=0) #visualize in browser 
+#use shortread to trim off the ends of the data where there are a lot of missing values 
+wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
+wnv_clean
+writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta")
 
-writeXStringSet(wnv_clean,file="fasta/wnv_clean.fas",format="fasta")
-
-#use pegas to build a haplotype network. 
+#use pegas to build a haplotype network
 input <- "wnv_clean.fas"
 fasta.read <- ape::read.dna(input, format='fasta')
 distance_wnv <- dist.dna(fasta.read)
 wnv_hap <- pegas::haplotype(fasta.read)
 wnv_hap <- sort(wnv_hap, what = "label")
 (net <- pegas::haploNet(wnv_hap))
-#Haplotype network with:
-#  618 haplotypes
-#  12712 links
-# link lengths between 1 and 21 steps
-
 ind.hap <-with(stack(setNames(attr(wnv_hap, "index"), rownames(wnv_hap))),
 table(hap=ind, pop=rownames(fasta.read)[values])
 )
-
-#Number of haplotypes: 618 Sequence length: 10933....Poor quality data causing such variation?  
-#looking at it, there are multiple reads that are considerably shorter, or have a singificant amount of Ns you can see 
-#no clean easy way to clean FASTA files in R. Use python script instead 
-#use python script "sequence_cleaner.py" from Biopython (genivaldo.gueiros@gmail.com) and select reads that are at least 10317 (based on eye balling where the large stretches of gaps were), and only allow sequences with 10% N content
-#output clear_wnv_clean.fas
+plot(net, size=attr(net, "freq"), scale.ratio=0.2, pie=ind.hap)
+legend(-8, 0, colnames(ind.hap), col=rainbow(ncol(ind.hap)), pch=19, ncol=2)
 ```
 
+********************************************************************************
+*Kyle comparing differences in metadata*
 ```{r}
+
 #check out clean data set
 clean_seq <- readDNAStringSet("fasta/clear_wnv_clean.fas")
 length(clean_seq[[1]]) #length of first sequence in the multi FASTA file
@@ -359,6 +366,7 @@ network <-plot(net_cleanest, size=attr(net_cleanest, "freq"), scale.ratio=0.2, p
 #legend(-8, 0, colnames(hap_cleanest), col=rainbow(ncol(hap_cleanest)), pch=19, ncol=2) need to get the legend to work
 
 
+
 #Trying rheirBAPS which creates hirearchical clustering of popualtions
 library(rhierbaps)
 wnv_cleanest_name <- system.file("exdata","fasta/wnv_cleanest.fas", package = "rhierbaps")
@@ -366,13 +374,5 @@ snp.matrix <- load_fasta(wnv_cleanest_name)
 
 ```
 
-
-
-
-********************************************************************************
-*Kyle tentatively comparing variation in sequences within a host species*
-Potential packages:
-Biostrings for alignment and organization
-jasonedit-list viewer interactive
 
 
