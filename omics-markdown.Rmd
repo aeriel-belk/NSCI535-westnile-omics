@@ -261,6 +261,7 @@ ca_density
 ######################################################
 
 #Genomics bit#
+#In the fasta folder, there are 5 different fasta files. wnv_fasta is the 
 #read in the data using bioStrings package
 cons_seq <- readDNAStringSet("consensus-seqs.fna")
 
@@ -312,9 +313,78 @@ legend(-8, 0, colnames(ind.hap), col=rainbow(ncol(ind.hap)), pch=19, ncol=2)
 ```
 
 ********************************************************************************
-*Kyle tentatively comparing variation in sequences within a host species*
-Potential packages:
-Biostrings for alignment and organization
-jasonedit-list viewer interactive
+*Kyle comparing differences in metadata*
+```{r}
+
+#check out clean data set
+clean_seq <- readDNAStringSet("fasta/clear_wnv_clean.fas")
+length(clean_seq[[1]]) #length of first sequence in the multi FASTA file
+
+#number of occurances of each character
+alphabetFrequency(clean_seq, baseOnly=TRUE, collapse=TRUE) #total 
+#      A       C       G       T   other 
+#1731156 1401504 1814384 1368161  146198  
+freqs_clean <- alphabetFrequency(DNAStringSet(clean_seq[!is.na(clean_seq)]), baseOnly=TRUE) # number of bases by sequence 
+head(freqs_clean)
+BrowseSeqs(clean_seq, highlight=0) #visualize sequences in internet browser
+ 
+
+clean_wnv_input <- "fasta/clear_wnv_clean.fas"
+fasta_read_clean <- ape::read.dna(clean_wnv_input, format='fasta')
+distance_wnv_clean <- dist.dna(fasta_read_clean)
+wnv_hap_clean <- pegas::haplotype(fasta_read_clean)
+wnv_hap_clean <- sort(wnv_hap_clean, what = "label")
+(net_clean <- pegas::haploNet(wnv_hap_clean))
+#Haplotype network with:
+#  568 haplotypes
+#  80028 links
+ # link lengths between 1 and 79 steps
+#Still a lot of haplotypes... maybe filter out reads with any Ns? 
+
+
+cleanest_seq <- readDNAStringSet("fasta/wnv_cleanest.fas")
+length(cleanest_seq) #how many sequences do we have after all that filtering?
+#157
+length(cleanest_seq[[1]]) #length of first sequence in the multi FASTA file
+  #10933, so it's the same length as the initial trimmed sequences 
+
+#number of occurances of each character
+alphabetFrequency(cleanest_seq, baseOnly=TRUE, collapse=TRUE) #total 
+#   A      C      G      T  other ### other in this might also be talking about '-'s
+#469385 380987 492752 370785   2572
+
+freqs_cleanest <- alphabetFrequency(DNAStringSet(cleanest_seq[!is.na(cleanest_seq)]), baseOnly=TRUE) # number of bases by sequence 
+head(freqs_cleanest)
+BrowseSeqs(cleanest_seq, highlight=0) #visualize sequences in internet browser.'other' in this might also be talking about '-'s
+ 
+cleanest_wnv_input <- "fasta/wnv_cleanest.fas"
+fasta_read_cleanest <- ape::read.dna(cleanest_wnv_input, format='fasta')
+distance_wnv_cleanest <- dist.dna(fasta_read_cleanest)
+wnv_hap_cleanest <- pegas::haplotype(fasta_read_cleanest)
+wnv_hap_cleanest <- sort(wnv_hap_cleanest, what = "label")
+(net_cleanest <- pegas::haploNet(wnv_hap_cleanest))
+#Haplotype network with:
+# 157 haplotypes
+# 9138 links
+ # link lengths between 1 and 97 steps
+
+
+hap_cleanest <-with(stack(setNames(attr(wnv_hap_cleanest, "index"), rownames(wnv_hap_cleanest))),
+table(hap=ind, pop=rownames(fasta_read_cleanest)[values])
+)
+hap_cleanest
+network <-plot(net_cleanest, size=attr(net_cleanest, "freq"), scale.ratio=0.2, pie=hap_cleanest)
+
+#legend(-8, 0, colnames(hap_cleanest), col=rainbow(ncol(hap_cleanest)), pch=19, ncol=2) need to get the legend to work
+
+
+
+#Trying rheirBAPS which creates hirearchical clustering of popualtions
+library(rhierbaps)
+wnv_cleanest_name <- system.file("exdata","fasta/wnv_cleanest.fas", package = "rhierbaps")
+snp.matrix <- load_fasta(wnv_cleanest_name)
+
+```
+
 
 
