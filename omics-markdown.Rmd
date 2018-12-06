@@ -186,7 +186,9 @@ ggplot() +
 popup_info <- paste0("<b>Species:</b>  ", 
                                   ca_wnv$species, "<br/>",
                                   "<b>Season:</b>  ",
-                                  ca_wnv$season)
+                                  ca_wnv$season, "<br/>",
+                                  "<b>Year:</b>  ",
+                                  ca_wnv$year)
 season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
                              ca_wnv$season)
 plolygon_popup1 <- paste0("California Counties:  ", 
