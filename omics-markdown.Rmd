@@ -52,6 +52,8 @@ library(knitr)
 library(ggplot2)
 library(sf)
 library(leaflet)
+library(viridisLite)
+library(RColorBrewer)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -185,13 +187,24 @@ popup_info <- paste0("<b>Species:</b>  ",
                                   ca_wnv$species, "<br/>",
                                   "<b>Season:</b>  ",
                                   ca_wnv$season)
+season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
+                             ca_wnv$season)
+plolygon_popup1 <- paste0("California Counties:  ", 
+                        ca_counties$AWATER)
+plolygon_popup2 <- paste0("Area Water:  ", 
+                        ca_counties$AWATER)
 
 leaflet() %>% 
   addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addPolygons(data = ca_counties, group = "tracts") %>% 
   addCircleMarkers(data = ca_wnv, radius = 2,
                    lng = ~ longitude, lat = ~ latitude,
                    popup = popup_info,
-                   clusterOptions = markerClusterOptions())
+                   color = season_pallet(ca_wnv$season),
+                   group = "infections",
+                   clusterOptions = markerClusterOptions()) %>%
+  addLayersControl(baseGroups = c("Base Map"),
+                   overlayGroups = c("Tracts", "Infections"))
 
 ```
   
@@ -214,7 +227,6 @@ library(dplyr)
 library(seqinr)
 library(ape)
 library(ShortRead)
-
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
 
 ca_pop <- get_acs(geography = "county", 
