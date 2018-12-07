@@ -265,6 +265,7 @@ library(tidycensus) ##tidycensus package
 library(leaflet)
 library(stringr)
 library(sf)
+library(dplyr)
 library(adegenet)
 library(pegas)
 library(Biostrings)
@@ -272,10 +273,21 @@ library(dplyr)
 library(seqinr)
 library(ape)
 library(ShortRead)
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
+library(tigris)
+library(adegenet)
+library(spdep)
+library(dartR) ## One good lesson. If you develope a package be sure to include all the dependencies in the installation you twat
+library(csv)
+library(DECIPHER)
+
 census_api_key("a22c251a387f5312b9e5c2e5ad21494088e984f6")
 
 ca_pop <- get_acs(geography = "county", 
-                     variables = "B01003_001", 
+               
                      state = "CA",
                      geometry = TRUE) 
 
@@ -303,10 +315,36 @@ ca_density
 
 
 
+#### County map of top three sampling counties
+
+
+ca_base <- counties(state= c("CA"), cb= T, class= "sf")
+kern <- ca_base %>% 
+  filter(NAME == "Kern")
+
+kern_county <- geom_sf(data = Kern, fill="brown1", alpha=.35)
+
+San_Diego <- ca_base %>% 
+  filter(NAME == "San Diego")
+San_Diego_county <- geom_sf(data = San_Diego, fill="darkorchid1", alpha=.35)
+
+Sacramento <- ca_base %>% 
+  filter( NAME=="Sacramento")
+Sacramento_county <- geom_sf(data = Sacramento, fill="cyan3", alpha=.35)
+
+county_map <- ggplot() + 
+  geom_sf(data = ca_base, color="grey")+
+  theme_void() +
+  Sacramento_county +
+  kern_county +
+  San_Diego_county
+  
+county_map
+
+
 ######################################################
 
 #Genomics bit#
-#In the fasta folder, there are 5 different fasta files. wnv_fasta is the 
 #read in the data using bioStrings package
 cons_seq <- readDNAStringSet("consensus-seqs.fna")
 
@@ -319,8 +357,6 @@ alphabetFrequency(cons_seq, baseOnly=TRUE, collapse=TRUE) #total
 freqs <- alphabetFrequency(DNAStringSet(cons_seq[!is.na(cons_seq)]), baseOnly=TRUE) #by sequence
 head(freqs)
 
-writeXStringSet(cons_seq,file="wnv_fasta.fas",format="fasta")
-
 
 ##DECIPHER package for aligning raw sequences to eachother based on similarity
 ## Note- don't have to run this code, Rebecca made a 
@@ -329,15 +365,20 @@ writeXStringSet(cons_seq,file="wnv_fasta.fas",format="fasta")
 library(DECIPHER)
 dna <- unique(cons_seq) # the unique input sequences
 index <- match(cons_seq, dna) # de-replication index
+<<<<<<< HEAD
+aligned <- AlignSeqs(dna) # align the sequences directly without translation
+aligned_seq <- aligned[index]
+names(aligned_seq) <- names(cons_seq) # the re-replicated alignment
 aligned_seq <- AlignSeqs(cons_seq) # align the sequences directly without translation
 aligned_seq <- U_DNA[index]
 names(cons_seq) <- names(cons_seq) # the re-replicated alignment
+
 head(aligned_seq)
 
 #Post processing 
 BrowseSeqs(aligned_seq, highlight=0) #visualize sequences in internet browser
 
-wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" apparently 
+wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" 
 
 writeXStringSet(wnv_adjusted,file="wnv_adjusted.fas",format="fasta")
 
@@ -382,7 +423,9 @@ fasta_read_clean <- ape::read.dna(clean_wnv_input, format='fasta')
 distance_wnv_clean <- dist.dna(fasta_read_clean)
 wnv_hap_clean <- pegas::haplotype(fasta_read_clean)
 wnv_hap_clean <- sort(wnv_hap_clean, what = "label")
-(net_clean <- pegas::haploNet(wnv_hap_clean))
+wnv_clean_sub <- subset(wnv_hap_clean, maxfreq=Inf, maxna = Inf, na=c("N", "-"))
+(net_clean <- pegas::haploNet(wnv_clean_sub))
+
 #Haplotype network with:
 #  568 haplotypes
 #  80028 links
@@ -410,27 +453,106 @@ fasta_read_cleanest <- ape::read.dna(cleanest_wnv_input, format='fasta')
 distance_wnv_cleanest <- dist.dna(fasta_read_cleanest)
 wnv_hap_cleanest <- pegas::haplotype(fasta_read_cleanest)
 wnv_hap_cleanest <- sort(wnv_hap_cleanest, what = "label")
-(net_cleanest <- pegas::haploNet(wnv_hap_cleanest))
+net_cleanest <- pegas::haploNet(wnv_hap_cleanest)
+net_cleanest
 #Haplotype network with:
 # 157 haplotypes
 # 9138 links
  # link lengths between 1 and 97 steps
+class(wnv_hap_cleanest)
+
+hap_cleanest <-with(
+  stack(setNames(attr(wnv_hap_cleanest, "index"), rownames(wnv_hap_cleanest))),
+table(hap=ind, pop=rownames(fasta_read_cleanest)[values]))
 
 
-hap_cleanest <-with(stack(setNames(attr(wnv_hap_cleanest, "index"), rownames(wnv_hap_cleanest))),
-table(hap=ind, pop=rownames(fasta_read_cleanest)[values])
-)
-hap_cleanest
-network <-plot(net_cleanest, size=attr(net_cleanest, "freq"), scale.ratio=0.2, pie=hap_cleanest)
+plot(net_cleanest, size=1, scale.ratio=0.2, pie=hap_cleanest, labels=NULL)
+legend(-8, 0, colnames(hap_cleanest), col=rainbow(ncol(hap_cleanest)), pch=19, ncol=2)
 
-#legend(-8, 0, colnames(hap_cleanest), col=rainbow(ncol(hap_cleanest)), pch=19, ncol=2) need to get the legend to work
+haplnet <- haploNet(wnv_hap_cleanest)
+plot(haplnet, size=1, scale.ratio=0.2, pie= wnv_hap_cleanest)
+
+###PCA on just snp data to calculate principle varaince and group individuals. 
+library(adegenet)
+library(spdep)
+library(dartR) ## One good lesson. If you develope a package be sure to include all the dependencies in the installation you twat
+library(csv)
+
+obj <- fasta2genlight("fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
+obj
+ # /// GENLIGHT OBJECT /////////
+ # 
+ # // 157 genotypes,  1,253 binary SNPs, size: 274.4 Kb
+ # 12 (0.01 %) missing data
+ # 
+ # // Basic content
+ #   @gen: list of 157 SNPbin
+ #   @ploidy: ploidy of each individual  (range: 1-1)
+ # 
+ # // Optional content
+ #   @ind.names:  157 individual labels
+ #   @loc.all:  1253 alleles
+ #   @position: integer storing positions of the SNPs
+ #   @other: a list containing: elements without names
+obj.gein <- gl2gi(obj, v=1) #3Convert to a geind obj usinf dartr
+x.wnv <- tab(obj.gein, freq=TRUE, NA.method="mean") #Get rid of missing values otherwise the pca won't run
+class(x.wnv)
+wnv_df <- as.data.frame(x.wnv)
+wnv_df <- add_rownames(wnv_df, "sequence_id")
+write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/wnv_test.csv")
+
+library(ggfortify)
+library(ggplot2)
+library(ade4)
+library(adegraphics)
+wnv_df_test <- read.csv("wnv_test1.csv")
+wnv_df_trial <- wnv_df_test[c(3:157)]
+wnv_df_trial <- as.data.frame(wnv_df_trial)
+pca.wnv <- dudi.pca(wnv_df_trial)
+
+pop_group <- as.factor(wnv_df_test$Population)
+s.class(pca.wnv$li, fac=pop_group, col=transp(funky(15)))
+
+##ggplot of top three sampling counties
+autoplot(prcomp(wnv_df_trial), data = wnv_df_test, colour = 'Population', frame=TRUE, frame.type='norm')
+
+mypca <- glPca(obj)
+myCol <- colorplot(mypca$scores,mypca$scores, transp=TRUE, cex=4, main= "West Nile Virus PCA")
+abline(h=0,v=0, col="grey")
+add.scatter.eig(mypca$eig[1:40],2,1,2, posi="topright", inset=.05, ratio=.3)
 
 
+pca.wnv <- dudi.pca(wnv_df_trial, center=TRUE, scale=FALSE)
+pop_groups <- as.factor(wnv_df_test$Population)
+s.label(pca.wnv$li)
+s.class(pca.wnv$li, fac = pop_groups, col= funky(15), facets = pop_groups)
 
-#Trying rheirBAPS which creates hirearchical clustering of popualtions
-library(rhierbaps)
-wnv_cleanest_name <- system.file("exdata","fasta/wnv_cleanest.fas", package = "rhierbaps")
-snp.matrix <- load_fasta(wnv_cleanest_name)
+
+##What does it look like with the "clean dataset?"
+
+obj2 <- fasta2genlight("fasta/clear_wnv_clean.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
+obj2
+
+obj.gein2 <- gl2gi(obj2, v=1) #3Convert to a geind obj usinf dartr
+x.wnv2 <- tab(obj.gein2, freq=TRUE, NA.method="mean") #Get rid of missing values otherwise the pca won't run
+class(x.wnv2)
+wnv_df2 <- as.data.frame(x.wnv2)
+wnv_df2 <- add_rownames(wnv_df2, "sequence_id")
+write.csv(wnv_df2, "wnv_test_2.csv")
+
+wnv_df_test2 <- read.csv("wnv_test_2.csv")
+wnv_df_trial2 <- wnv_df_test2[c(3:157)]
+wnv_df_trial2 <- as.data.frame(wnv_df_trial2)
+
+autoplot(prcomp(wnv_df_trial2), data = wnv_df_test2, colour = 'population', frame=TRUE, frame.type='norm') +theme_classic()
+
+
+pca.wnv.test <- dudi.pca(wnv_df_trial2, center=TRUE, scale=FALSE)
+pop_group <- as.factor(wnv_df_test2$population)
+s.label(pca.wnv.test$li,  facets = pop_group)
+s.class(pca.wnv.test$li, fac = pop_group, col= funky(15), repel=TRUE)
+
+
 
 ```
 
