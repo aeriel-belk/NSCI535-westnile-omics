@@ -9,9 +9,9 @@ W007,W13-0064,American Crow,corvid,blue,Tissue,100,606.326,7/23/13,USA,CA,San Di
 W008,W14-0111,American Crow,corvid,blue,Tissue,100,3281.47,10/7/14,USA,CA,San Diego,32.677,-117.071,coding-complete,W008_2014-10-07_USA_CA_SanDiego_-117.071_32.677.fasta
 W009,15-B-0414-B,American Crow,corvid,blue,Tissue,100,4176.46,10/2/15,USA,CA,San Diego,32.827,-117.142,coding-complete,W009_2015-10-02_USA_CA_SanDiego_-117.142_32.827.fasta
 W010,16-B-0935-B,American Crow,corvid,blue,Tissue,100,587.186,8/15/16,USA,CA,San Diego,32.631,-117.073,coding-complete,W010_2016-08-15_USA_CA_SanDiego_-117.073_32.631.fasta
-W011,209-1616 T,Sharp-shinned hawk,hawk,yellow,Tissue,100,292.286,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W011_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
-W012,W14-0125 T,Hawk,hawk,yellow,Tissue,100,4789.33,10/28/14,USA,CA,San Diego,33.016,-117.07,coding-complete,W012_2014-10-28_USA_CA_SanDiego_-117.070_33.016.fasta
-W013,16-B-0830-B,Hawk,hawk,yellow,Tissue,100,874.683,6/30/16,USA,CA,San Diego,33.015,-117.053,coding-complete,W013_2016-06-30_USA_CA_SanDiego_-117.053_33.015.fasta
+W011,209-1616 T,Sharp-shinned hawk,hawk,green,Tissue,100,292.286,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W011_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
+W012,W14-0125 T,Hawk,hawk,green,Tissue,100,4789.33,10/28/14,USA,CA,San Diego,33.016,-117.07,coding-complete,W012_2014-10-28_USA_CA_SanDiego_-117.070_33.016.fasta
+W013,16-B-0830-B,Hawk,hawk,green,Tissue,100,874.683,6/30/16,USA,CA,San Diego,33.015,-117.053,coding-complete,W013_2016-06-30_USA_CA_SanDiego_-117.053_33.015.fasta
 W014,M14-0148,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,4494.08,10/31/14,USA,CA,San Diego,32.839,-117.129,coding-complete,W014_2014-10-31_USA_CA_SanDiego_-117.129_32.839.fasta
 W015,15-Q-0217,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,4729.51,8/21/15,USA,CA,San Diego,32.652,-117.107,coding-complete,W015_2015-08-21_USA_CA_SanDiego_-117.107_32.652.fasta
 W016,16-Q-0503,Culex tarsalis,mosquito,red,Pooled mosquitos,100,2959.68,5/16/16,USA,CA,San Diego,x,x,coding-complete,W016_2016-05-16_USA_CA_SanDiego__.fasta
@@ -19,14 +19,14 @@ W017,208-0907,Jaybird,corvid,blue,Tissue,100,4590.66,3/19/07,USA,CA,San Diego,32
 W018,208-0945,American Crow,corvid,blue,Tissue,100,2666.62,3/19/07,USA,CA,San Diego,33.239,-117.335,coding-complete,W018_2007-03-19_USA_CA_SanDiego_-117.335_33.239.fasta
 W019,208-0953,American Crow,corvid,blue,Tissue,100,2044.84,10/2/07,USA,CA,San Diego,32.786,-116.95,coding-complete,W019_2007-10-02_USA_CA_SanDiego_-116.950_32.786.fasta
 W020,208-0943,American Crow,corvid,blue,Tissue,100,3965.89,10/2/07,USA,CA,San Diego,33.246,-117.328,coding-complete,W020_2007-10-02_USA_CA_SanDiego_-117.328_33.246.fasta
-W021,208-1201,Hawk,hawk,yellow,Tissue,100,4219.38,10/25/07,USA,CA,San Diego,x,x,coding-complete,W021_2007-10-25_USA_CA_SanDiego__.fasta
+W021,208-1201,Hawk,hawk,green,Tissue,100,4219.38,10/25/07,USA,CA,San Diego,x,x,coding-complete,W021_2007-10-25_USA_CA_SanDiego__.fasta
 W022,208-2252,American Crow,corvid,blue,Tissue,100,2079.04,2/6/08,USA,CA,San Diego,32.855,-117.004,coding-complete,W022_2008-02-06_USA_CA_SanDiego_-117.004_32.855.fasta
 W026,208-2824,American Crow,corvid,blue,Tissue,100,0.586091,5/14/08,USA,CA,San Diego,32.901,-117.158,coding-complete,W026_2008-05-14_USA_CA_SanDiego_-117.158_32.901.fasta
 W028,208-3179,American Crow,corvid,blue,Tissue,100,1.89818,6/11/08,USA,CA,San Diego,32.958,-117.241,coding-complete,W028_2008-06-11_USA_CA_SanDiego_-117.241_32.958.fasta
 W029,208-3183,American Crow,corvid,blue,Tissue,100,8.11479,6/11/08,USA,CA,San Diego,32.999,-117.255,coding-complete,W029_2008-06-11_USA_CA_SanDiego_-117.255_32.999.fasta
-W030,208-3351b,Sharp-shinned hawk,hawk,yellow,Tissue,100,2721.32,6/25/08,USA,CA,San Diego,32.73,-117.032,coding-complete,W030_2008-06-25_USA_CA_SanDiego_-117.032_32.730.fasta
+W030,208-3351b,Sharp-shinned hawk,hawk,green,Tissue,100,2721.32,6/25/08,USA,CA,San Diego,32.73,-117.032,coding-complete,W030_2008-06-25_USA_CA_SanDiego_-117.032_32.730.fasta
 W031,208-0941,American Crow,corvid,blue,Tissue,100,133.676,9/15/08,USA,CA,San Diego,32.958,-117.14,coding-complete,W031_2008-09-15_USA_CA_SanDiego_-117.140_32.958.fasta
-W032,208-3343,Coopers Hawk,hawk,yellow,Tissue,100,1171.03,6/25/08,USA,CA,San Diego,32.763,-117.251,coding-complete,W032_2008-06-25_USA_CA_SanDiego_-117.251_32.763.fasta
+W032,208-3343,Coopers Hawk,hawk,green,Tissue,100,1171.03,6/25/08,USA,CA,San Diego,32.763,-117.251,coding-complete,W032_2008-06-25_USA_CA_SanDiego_-117.251_32.763.fasta
 W033,209-0513b,American Crow,corvid,blue,Tissue,100,2091.93,8/7/08,USA,CA,San Diego,32.844,-116.969,coding-complete,W033_2008-08-07_USA_CA_SanDiego_-116.969_32.844.fasta
 W034,209-0526b,Western Scrub Jay,corvid,blue,Tissue,100,1319.07,8/7/08,USA,CA,San Diego,33.091,-117.07,coding-complete,W034_2008-08-07_USA_CA_SanDiego_-117.070_33.091.fasta
 W035,209-0945b,American Crow,corvid,blue,Tissue,100,145.04,9/18/08,USA,CA,San Diego,33.032,-117.289,coding-complete,W035_2008-09-18_USA_CA_SanDiego_-117.289_33.032.fasta
@@ -36,12 +36,12 @@ W038,209-1603b,American Crow,corvid,blue,Tissue,100,618.923,12/1/08,USA,CA,San D
 W039,209-1619b,American Crow,corvid,blue,Tissue,100,309.287,12/8/08,USA,CA,San Diego,32.951,-117.058,coding-complete,W039_2008-12-08_USA_CA_SanDiego_-117.058_32.951.fasta
 W040,209-0917b,American Crow,corvid,blue,Tissue,100,110.956,9/15/08,USA,CA,San Diego,32.81,-116.649,coding-complete,W040_2008-09-15_USA_CA_SanDiego_-116.649_32.810.fasta
 W041,209-0987b,American Crow,corvid,blue,Tissue,100,2737.55,9/18/08,USA,CA,San Diego,32.837,-116.766,coding-complete,W041_2008-09-18_USA_CA_SanDiego_-116.766_32.837.fasta
-W042,209-1880,Red-shouldered Hawk,hawk,yellow,Tissue,100,1780.15,1/20/09,USA,CA,San Diego,33.005,-117.042,coding-complete,W042_2009-01-20_USA_CA_SanDiego_-117.042_33.005.fasta
-W043,209-1616b,Sharp-shinned hawk,hawk,yellow,Tissue,100,1614.7,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W043_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
-W044,209-1582b,Sharp-shinned hawk,hawk,yellow,Tissue,100,1657.34,12/1/08,USA,CA,San Diego,33.33,-117.227,coding-complete,W044_2008-12-01_USA_CA_SanDiego_-117.227_33.330.fasta
-W046,209-2472b,Red-shouldered Hawk,hawk,yellow,Tissue,100,2191.13,4/8/09,USA,CA,San Diego,32.754,-116.958,coding-complete,W046_2009-04-08_USA_CA_SanDiego_-116.958_32.754.fasta
+W042,209-1880,Red-shouldered Hawk,hawk,green,Tissue,100,1780.15,1/20/09,USA,CA,San Diego,33.005,-117.042,coding-complete,W042_2009-01-20_USA_CA_SanDiego_-117.042_33.005.fasta
+W043,209-1616b,Sharp-shinned hawk,hawk,green,Tissue,100,1614.7,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W043_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
+W044,209-1582b,Sharp-shinned hawk,hawk,green,Tissue,100,1657.34,12/1/08,USA,CA,San Diego,33.33,-117.227,coding-complete,W044_2008-12-01_USA_CA_SanDiego_-117.227_33.330.fasta
+W046,209-2472b,Red-shouldered Hawk,hawk,green,Tissue,100,2191.13,4/8/09,USA,CA,San Diego,32.754,-116.958,coding-complete,W046_2009-04-08_USA_CA_SanDiego_-116.958_32.754.fasta
 W047,209-2710b,American Crow,corvid,blue,Tissue,100,1163.65,5/21/09,USA,CA,San Diego,32.972,-117.261,coding-complete,W047_2009-05-21_USA_CA_SanDiego_-117.261_32.972.fasta
-W048,209-1755b,Sharp-shinned hawk,hawk,yellow,Tissue,100,1619.68,12/22/08,USA,CA,San Diego,32.78,-116.924,coding-complete,W048_2008-12-22_USA_CA_SanDiego_-116.924_32.780.fasta
+W048,209-1755b,Sharp-shinned hawk,hawk,green,Tissue,100,1619.68,12/22/08,USA,CA,San Diego,32.78,-116.924,coding-complete,W048_2008-12-22_USA_CA_SanDiego_-116.924_32.780.fasta
 W049,209-2895b,American Crow,corvid,blue,Tissue,100,231.117,6/18/09,USA,CA,San Diego,33.256,-116.983,coding-complete,W049_2009-06-18_USA_CA_SanDiego_-116.983_33.256.fasta
 W050,210-0371b,American Crow,corvid,blue,Tissue,100,1370.12,9/15/09,USA,CA,San Diego,32.828,-116.518,coding-complete,W050_2009-09-15_USA_CA_SanDiego_-116.518_32.828.fasta
 W051,210-0453,American Crow,corvid,blue,Tissue,100,1169.73,9/30/09,USA,CA,San Diego,33.26,-117.072,coding-complete,W051_2009-09-30_USA_CA_SanDiego_-117.072_33.260.fasta
@@ -49,17 +49,17 @@ W055,W13-0070,American Crow,corvid,blue,Tissue,100,4528.94,8/1/13,USA,CA,San Die
 W057,W13-0076,American Crow,corvid,blue,Tissue,100,1652.66,9/9/13,USA,CA,San Diego,32.84,-116.998,coding-complete,W057_2013-09-09_USA_CA_SanDiego_-116.998_32.840.fasta
 W058,W13-0095,American Crow,corvid,blue,Tissue,100,1140.27,11/1/13,USA,CA,San Diego,32.736,-117.149,coding-complete,W058_2013-11-01_USA_CA_SanDiego_-117.149_32.736.fasta
 W059,W13-0098,American Crow,corvid,blue,Tissue,100,293.525,11/7/13,USA,CA,San Diego,32.84,-116.998,coding-complete,W059_2013-11-07_USA_CA_SanDiego_-116.998_32.840.fasta
-W060,W13-0096b,Hawk,hawk,yellow,Tissue,100,4329.7,11/7/13,USA,CA,San Diego,32.674,-117.24,coding-complete,W060_2013-11-07_USA_CA_SanDiego_-117.240_32.674.fasta
-W061,W14-0064b,Hawk,hawk,yellow,Tissue,99.96,2784.46,8/6/14,USA,CA,San Diego,32.838,-116.894,coding-complete,W061_2014-08-06_USA_CA_SanDiego_-116.894_32.838.fasta
+W060,W13-0096b,Hawk,hawk,green,Tissue,100,4329.7,11/7/13,USA,CA,San Diego,32.674,-117.24,coding-complete,W060_2013-11-07_USA_CA_SanDiego_-117.240_32.674.fasta
+W061,W14-0064b,Hawk,hawk,green,Tissue,99.96,2784.46,8/6/14,USA,CA,San Diego,32.838,-116.894,coding-complete,W061_2014-08-06_USA_CA_SanDiego_-116.894_32.838.fasta
 W062,W14-0051,American Crow,corvid,blue,Tissue,100,2027.22,7/17/14,USA,CA,San Diego,32.741,-117.125,coding-complete,W062_2014-07-17_USA_CA_SanDiego_-117.125_32.741.fasta
 W063,W14-0065,American Crow,corvid,blue,Tissue,100,332.399,8/13/14,USA,CA,San Diego,32.797,-117.02,coding-complete,W063_2014-08-13_USA_CA_SanDiego_-117.020_32.797.fasta
 W064,W14-0068,Jay,corvid,blue,Tissue,100,225.439,8/13/14,USA,CA,San Diego,32.776,-116.996,coding-complete,W064_2014-08-13_USA_CA_SanDiego_-116.996_32.776.fasta
 W065,W14-0098,American Crow,corvid,blue,Tissue,100,1354.72,9/25/14,USA,CA,San Diego,32.852,-116.937,coding-complete,W065_2014-09-25_USA_CA_SanDiego_-116.937_32.852.fasta
 W066,W14-0101,American Crow,corvid,blue,Tissue,100,3216.7,10/3/14,USA,CA,San Diego,32.84,-116.997,coding-complete,W066_2014-10-03_USA_CA_SanDiego_-116.997_32.840.fasta
 W067,W14-0102,American Crow,corvid,blue,Tissue,100,3971.82,10/3/14,USA,CA,San Diego,32.775,-117.205,coding-complete,W067_2014-10-03_USA_CA_SanDiego_-117.205_32.775.fasta
-W068,W14-0125b,Hawk,hawk,yellow,Tissue,100,1122.56,10/28/14,USA,CA,San Diego,33.016,-117.07,coding-complete,W068_2014-10-28_USA_CA_SanDiego_-117.070_33.016.fasta
+W068,W14-0125b,Hawk,hawk,green,Tissue,100,1122.56,10/28/14,USA,CA,San Diego,33.016,-117.07,coding-complete,W068_2014-10-28_USA_CA_SanDiego_-117.070_33.016.fasta
 W070,M14-0160,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,400.176,11/7/14,USA,CA,San Diego,32.629,-116.966,coding-complete,W070_2014-11-07_USA_CA_SanDiego_-116.966_32.629.fasta
-W071,W14-0138b,Hawk,hawk,yellow,Tissue,100,143.739,11/10/14,USA,CA,San Diego,32.932,-117.244,coding-complete,W071_2014-11-10_USA_CA_SanDiego_-117.244_32.932.fasta
+W071,W14-0138b,Hawk,hawk,green,Tissue,100,143.739,11/10/14,USA,CA,San Diego,32.932,-117.244,coding-complete,W071_2014-11-10_USA_CA_SanDiego_-117.244_32.932.fasta
 W072,W14-0142,American Crow,corvid,blue,Tissue,100,2740.68,11/17/14,USA,CA,San Diego,33.029,-117.084,coding-complete,W072_2014-11-17_USA_CA_SanDiego_-117.084_33.029.fasta
 W073,W14-0143,American Crow,corvid,blue,Tissue,100,3995.8,11/17/14,USA,CA,San Diego,33.018,-116.884,coding-complete,W073_2014-11-17_USA_CA_SanDiego_-116.884_33.018.fasta
 W074,W14-0154,Raven,corvid,blue,Tissue,100,4916.23,12/18/14,USA,CA,San Diego,32.797,-117.018,coding-complete,W074_2014-12-18_USA_CA_SanDiego_-117.018_32.797.fasta
@@ -71,8 +71,8 @@ W079,15Q-00115,Culex quinquefasciatus ,mosquito,red,Pooled mosquitos,100,4996.8,
 W080,15Q-00117,Culex quinquefasciatus ,mosquito,red,Pooled mosquitos,100,4274.51,7/10/15,USA,CA,San Diego,32.737,-117.029,coding-complete,W080_2015-07-10_USA_CA_SanDiego_-117.029_32.737.fasta
 W081,15Q-00147,Culex stigmatosoma,mosquito,red,Pooled mosquitos,100,3269.36,7/28/15,USA,CA,San Diego,32.849,-116.86,coding-complete,W081_2015-07-28_USA_CA_SanDiego_-116.860_32.849.fasta
 W082,15Q-00194,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,4652.47,8/14/15,USA,CA,San Diego,33.18,-117.332,coding-complete,W082_2015-08-14_USA_CA_SanDiego_-117.332_33.180.fasta
-W083,15-B-00226-T,Cooper's hawk,hawk,yellow,Tissue,100,4580.94,8/14/15,USA,CA,San Diego,33.137,-117.199,coding-complete,W083_2015-08-14_USA_CA_SanDiego_-117.199_33.137.fasta
-W084,15-B-00234-B,Sharp-shinned hawk,hawk,yellow,Tissue,100,2223.81,8/18/15,USA,CA,San Diego,32.673,-117.053,coding-complete,W084_2015-08-18_USA_CA_SanDiego_-117.053_32.673.fasta
+W083,15-B-00226-T,Cooper's hawk,hawk,green,Tissue,100,4580.94,8/14/15,USA,CA,San Diego,33.137,-117.199,coding-complete,W083_2015-08-14_USA_CA_SanDiego_-117.199_33.137.fasta
+W084,15-B-00234-B,Sharp-shinned hawk,hawk,green,Tissue,100,2223.81,8/18/15,USA,CA,San Diego,32.673,-117.053,coding-complete,W084_2015-08-18_USA_CA_SanDiego_-117.053_32.673.fasta
 W085,15Q-00217,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,4497.88,8/21/15,USA,CA,San Diego,32.652,-117.107,coding-complete,W085_2015-08-21_USA_CA_SanDiego_-117.107_32.652.fasta
 W086,15Q-00222,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,4404.26,8/28/15,USA,CA,San Diego,32.984,-117.227,coding-complete,W086_2015-08-28_USA_CA_SanDiego_-117.227_32.984.fasta
 W087,15Q-00229,Culex quinquefasciatus,mosquito,red,Pooled mosquitos,100,5066.7,8/28/15,USA,CA,San Diego,32.961,-117.254,coding-complete,W087_2015-08-28_USA_CA_SanDiego_-117.254_32.961.fasta
@@ -139,7 +139,7 @@ W152,13-2824,American Robin,songbird,pink,Tissue,100,3397.49,8/2/13,USA,CA,Place
 W153,13-3056,House Finch,songbird,pink,Tissue,98.39,3033.86,8/8/13,USA,CA,Shasta,40.57,-122.316,coding-complete,W153_2013-08-08_USA_CA_Shasta_-122.316_40.570.fasta
 W154,13-3073,California Scrub-Jay,corvid,blue,Tissue,100,3655.53,8/7/13,USA,CA,Butte,39.775,-121.596,coding-complete,W154_2013-08-07_USA_CA_Butte_-121.596_39.775.fasta
 W155,13-3100,California Scrub-Jay,corvid,blue,Tissue,97.64,3256.19,8/8/13,USA,CA,Los Angeles,33.859,-118.391,coding-complete,W155_2013-08-08_USA_CA_LosAngeles_-118.391_33.859.fasta
-W156,13-3102,Red-shouldered Hawk,hawk,yellow,Tissue,96.24,3011.87,7/31/13,USA,CA,Los Angeles,34.098,-117.805,coding-complete,W156_2013-07-31_USA_CA_LosAngeles_-117.805_34.098.fasta
+W156,13-3102,Red-shouldered Hawk,hawk,green,Tissue,96.24,3011.87,7/31/13,USA,CA,Los Angeles,34.098,-117.805,coding-complete,W156_2013-07-31_USA_CA_LosAngeles_-117.805_34.098.fasta
 W157,13-3197,House Finch,songbird,pink,Tissue,99.4,3016.88,8/12/13,USA,CA,Shasta,40.468,-122.277,coding-complete,W157_2013-08-12_USA_CA_Shasta_-122.277_40.468.fasta
 W158,13-3473,California Scrub-Jay,corvid,blue,Tissue,100,4597.89,8/20/13,USA,CA,Butte,39.732,-121.841,coding-complete,W158_2013-08-20_USA_CA_Butte_-121.841_39.732.fasta
 W159,13-3592,California Scrub-Jay,corvid,blue,Tissue,100,2826.61,8/25/13,USA,CA,Merced,37.338,-120.636,coding-complete,W159_2013-08-25_USA_CA_Merced_-120.636_37.338.fasta
@@ -311,7 +311,7 @@ W327,Nov-73,House Sparrow,songbird,pink,Tissue,96.61,473.271,11/17/11,USA,CA,Ker
 W328,12-1421,California Scrub-Jay,corvid,blue,Tissue,100,764.647,6/8/12,USA,CA,Kern,35.356,-119.046,coding-complete,W328_2012-06-08_USA_CA_Kern_-119.046_35.356.fasta
 W329,12-1487,Brewer's Blackbird,corvid,blue,Tissue,93.31,95.6658,6/10/12,USA,CA,Kern,35.396,-119.151,coding-complete,W329_2012-06-10_USA_CA_Kern_-119.151_35.396.fasta
 W330,12-1525,Allen's Hummingbird,songbird,pink,Tissue,78.11,248.633,6/12/12,USA,CA,Kern,35.267,-119.016,coding-complete,W330_2012-06-12_USA_CA_Kern_-119.016_35.267.fasta
-W331,12-1599,American Kestrel,hawk,yellow,Tissue,100,4641.19,6/13/12,USA,CA,Kern,35.362,-119.025,coding-complete,W331_2012-06-13_USA_CA_Kern_-119.025_35.362.fasta
+W331,12-1599,American Kestrel,hawk,green,Tissue,100,4641.19,6/13/12,USA,CA,Kern,35.362,-119.025,coding-complete,W331_2012-06-13_USA_CA_Kern_-119.025_35.362.fasta
 W332,12-1741,California Scrub-Jay,corvid,blue,Tissue,100,209.044,6/18/12,USA,CA,Kern,35.344,-119.051,coding-complete,W332_2012-06-18_USA_CA_Kern_-119.051_35.344.fasta
 W333,Dec-34,American Crow,corvid,blue,Tissue,100,212.819,6/24/12,USA,CA,Kern,35.386,-119.031,coding-complete,W333_2012-06-24_USA_CA_Kern_-119.031_35.386.fasta
 W334,Dec-72,House Finch,songbird,pink,Tissue,98.21,335.338,7/9/12,USA,CA,Kern,35.386,-119.031,coding-complete,W334_2012-07-09_USA_CA_Kern_-119.031_35.386.fasta
@@ -453,11 +453,11 @@ W521,209-1050,American Crow,corvid,blue,Tissue,100,1783.26,9/25/08,USA,CA,San Di
 W522,209-1064,American Crow,corvid,blue,Tissue,100,229.217,9/26/09,USA,CA,San Diego,32.751,-117.053,coding-complete,W522_2009-09-26_USA_CA_SanDiego_-117.053_32.751.fasta
 W523,209-1378,American Crow,corvid,blue,Tissue,100,889.073,11/5/08,USA,CA,San Diego,32.913,-117.223,coding-complete,W523_2008-11-05_USA_CA_SanDiego_-117.223_32.913.fasta
 W524,209-1464,American Crow,corvid,blue,Tissue,100,1564.66,11/10/08,USA,CA,San Diego,32.783,-117.236,coding-complete,W524_2008-11-10_USA_CA_SanDiego_-117.236_32.783.fasta
-W525,209-1513,Coopers Hawk,hawk,yellow,Tissue,100,4787.04,11/17/08,USA,CA,San Diego,32.886,-117.196,coding-complete,W525_2008-11-17_USA_CA_SanDiego_-117.196_32.886.fasta
+W525,209-1513,Coopers Hawk,hawk,green,Tissue,100,4787.04,11/17/08,USA,CA,San Diego,32.886,-117.196,coding-complete,W525_2008-11-17_USA_CA_SanDiego_-117.196_32.886.fasta
 W526,209-1603,American Crow,corvid,blue,Tissue,100,4407.38,12/1/08,USA,CA,San Diego,32.928,-117.139,coding-complete,W526_2008-12-01_USA_CA_SanDiego_-117.139_32.928.fasta
-W527,209-1616,Sharp-shinned hawk,hawk,yellow,Tissue,100,4593.93,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W527_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
+W527,209-1616,Sharp-shinned hawk,hawk,green,Tissue,100,4593.93,12/8/08,USA,CA,San Diego,33.016,-116.802,coding-complete,W527_2008-12-08_USA_CA_SanDiego_-116.802_33.016.fasta
 W528,209-1619,American Crow,corvid,blue,Tissue,100,1460.63,12/8/08,USA,CA,San Diego,32.951,-117.058,coding-complete,W528_2008-12-08_USA_CA_SanDiego_-117.058_32.951.fasta
-W529,209-1755,Sharp-shinned hawk,hawk,yellow,Tissue,100,5349.35,12/22/08,USA,CA,San Diego,32.78,-116.924,coding-complete,W529_2008-12-22_USA_CA_SanDiego_-116.924_32.780.fasta
+W529,209-1755,Sharp-shinned hawk,hawk,green,Tissue,100,5349.35,12/22/08,USA,CA,San Diego,32.78,-116.924,coding-complete,W529_2008-12-22_USA_CA_SanDiego_-116.924_32.780.fasta
 W530,209-1879,American Crow,corvid,blue,Tissue,100,512.784,1/16/09,USA,CA,San Diego,32.906,-117.23,coding-complete,W530_2009-01-16_USA_CA_SanDiego_-117.230_32.906.fasta
 W531,209-1944,American Crow,corvid,blue,Tissue,100,3749.97,1/26/09,USA,CA,San Diego,32.905,-117.23,coding-complete,W531_2009-01-26_USA_CA_SanDiego_-117.230_32.905.fasta
 W532,209-2042,American Crow,corvid,blue,Tissue,100,4875.2,2/5/09,USA,CA,San Diego,32.751,-117.051,coding-complete,W532_2009-02-05_USA_CA_SanDiego_-117.051_32.751.fasta
@@ -474,7 +474,7 @@ W542,W14-0106,American Crow,corvid,blue,Tissue,100,1679.98,10/2/14,USA,CA,San Di
 W543,W14-0136,American Crow,corvid,blue,Tissue,100,486.111,11/10/14,USA,CA,San Diego,32.795,-117.031,coding-complete,W543_2014-11-10_USA_CA_SanDiego_-117.031_32.795.fasta
 W544,W14-0140,American Crow,corvid,blue,Tissue,100,329.038,11/13/14,USA,CA,San Diego,33.011,-116.813,coding-complete,W544_2014-11-13_USA_CA_SanDiego_-116.813_33.011.fasta
 W545,W14-0142,American Crow,corvid,blue,Tissue,100,218.665,11/17/14,USA,CA,San Diego,33.029,-117.084,coding-complete,W545_2014-11-17_USA_CA_SanDiego_-117.084_33.029.fasta
-W546,W14-0152,Hawk,hawk,yellow,Tissue,100,356.815,12/18/14,USA,CA,San Diego,32.84,-117.101,coding-complete,W546_2014-12-18_USA_CA_SanDiego_-117.101_32.840.fasta
+W546,W14-0152,Hawk,hawk,green,Tissue,100,356.815,12/18/14,USA,CA,San Diego,32.84,-117.101,coding-complete,W546_2014-12-18_USA_CA_SanDiego_-117.101_32.840.fasta
 W547,W14-0154,Raven,corvid,blue,Tissue,100,356.815,12/18/14,USA,CA,San Diego,32.797,-117.018,coding-complete,W547_2014-12-18_USA_CA_SanDiego_-117.018_32.797.fasta
 W548,W14-0155,Raven,corvid,blue,Tissue,100,4614.07,12/16/14,USA,CA,San Diego,32.736,-117.081,coding-complete,W548_2014-12-16_USA_CA_SanDiego_-117.081_32.736.fasta
 W549,15-B-00055-B,American Crow,corvid,blue,Tissue,100,314.29,4/16/15,USA,CA,San Diego,32.835,-117.153,coding-complete,W549_2015-04-16_USA_CA_SanDiego_-117.153_32.835.fasta
@@ -510,8 +510,8 @@ W578,15-B-00470-B,American Crow,corvid,blue,Tissue,100,5239.05,10/16/15,USA,CA,S
 W579,15-B-00518-B,American Crow,corvid,blue,Tissue,100,2696.89,11/2/15,USA,CA,San Diego,32.747,-117.212,coding-complete,W579_2015-11-02_USA_CA_SanDiego_-117.212_32.747.fasta
 W580,15-B-00551-B,American Crow,corvid,blue,Tissue,100,2696.89,11/16/15,USA,CA,San Diego,32.741,-117.241,coding-complete,W580_2015-11-16_USA_CA_SanDiego_-117.241_32.741.fasta
 W581,15-B-00552-B,American Crow,corvid,blue,Tissue,100,77.5129,11/17/15,USA,CA,San Diego,33.029,-117.085,coding-complete,W581_2015-11-17_USA_CA_SanDiego_-117.085_33.029.fasta
-W582,15-B-00585-B,Sharp-shinned Hawk,hawk,yellow,Tissue,100,624.417,12/11/15,USA,CA,San Diego,32.767,-117.052,coding-complete,W582_2015-12-11_USA_CA_SanDiego_-117.052_32.767.fasta
-W583,15-B-00598-B,Red-shouldered Hawk,hawk,yellow,Tissue,99.18,1047.4,12/28/15,USA,CA,San Diego,33.044,-117.065,coding-complete,W583_2015-12-28_USA_CA_SanDiego_-117.065_33.044.fasta
+W582,15-B-00585-B,Sharp-shinned Hawk,hawk,green,Tissue,100,624.417,12/11/15,USA,CA,San Diego,32.767,-117.052,coding-complete,W582_2015-12-11_USA_CA_SanDiego_-117.052_32.767.fasta
+W583,15-B-00598-B,Red-shouldered Hawk,hawk,green,Tissue,99.18,1047.4,12/28/15,USA,CA,San Diego,33.044,-117.065,coding-complete,W583_2015-12-28_USA_CA_SanDiego_-117.065_33.044.fasta
 W584,16-B-00643-B,American Crow,corvid,blue,Tissue,100,944.052,2/27/16,USA,CA,San Diego,32.946,-117.245,coding-complete,W584_2016-02-27_USA_CA_SanDiego_-117.245_32.946.fasta
 W585,16-B-00644-B,American Crow,corvid,blue,Tissue,100,817.839,2/28/16,USA,CA,San Diego,32.946,-117.245,coding-complete,W585_2016-02-28_USA_CA_SanDiego_-117.245_32.946.fasta
 W586,16-B-00652-B,American Crow,corvid,blue,Tissue,100,2289.03,3/16/16,USA,CA,San Diego,33.147,-117.054,coding-complete,W586_2016-03-16_USA_CA_SanDiego_-117.054_33.147.fasta
@@ -576,7 +576,7 @@ W763,15-1611,Barn Swallow,songbird,pink,Tissue,100,880.289,7/12/15,USA,CA,Yolo,3
 W764,15-1902,Yellow-billed Magpie,corvid,blue,Tissue,100,4564.09,7/26/15,USA,CA,Yolo,38.557,-121.721,coding-complete,W764_2015-07-26_USA_CA_Yolo_-121.721_38.557.fasta
 W765,15-2120,California Scrub-Jay,corvid,blue,Tissue,100,2195.71,8/6/15,USA,CA,Sacramento,38.442,-121.369,coding-complete,W765_2015-08-06_USA_CA_Sacramento_-121.369_38.442.fasta
 W766,15-2268,American Crow,corvid,blue,Tissue,100,1755.83,8/12/15,USA,CA,Yolo,38.564,-121.745,coding-complete,W766_2015-08-12_USA_CA_Yolo_-121.745_38.564.fasta
-W767,15-3233,Red-tailed Hawk,hawk,yellow,Tissue,100,484.52,9/24/15,USA,CA,Sacramento,38.546,-121.224,coding-complete,W767_2015-09-24_USA_CA_Sacramento_-121.224_38.546.fasta
+W767,15-3233,Red-tailed Hawk,hawk,green,Tissue,100,484.52,9/24/15,USA,CA,Sacramento,38.546,-121.224,coding-complete,W767_2015-09-24_USA_CA_Sacramento_-121.224_38.546.fasta
 W768,15-3418,American Crow,corvid,blue,Tissue,100,1972.61,10/4/15,USA,CA,Sacramento,38.588,-121.393,coding-complete,W768_2015-10-04_USA_CA_Sacramento_-121.393_38.588.fasta
 W769,16-517,Yellow-billed Magpie,corvid,blue,Tissue,100,482.745,5/19/16,USA,CA,Sacramento,38.564,-121.363,coding-complete,W769_2016-05-19_USA_CA_Sacramento_-121.363_38.564.fasta
 W770,16-1009,California Scrub-Jay,corvid,blue,Tissue,100,1316.59,6/15/16,USA,CA,Sacramento,38.644,-121.324,coding-complete,W770_2016-06-15_USA_CA_Sacramento_-121.324_38.644.fasta
@@ -605,7 +605,7 @@ W794,20-May,Yellow-billed Magpie,corvid,blue,Tissue,100,1927.88,7/24/05,USA,CA,S
 W795,May-43,Yellow-billed Magpie,corvid,blue,Tissue,100,917.961,7/25/05,USA,CA,Sacramento,38.61,-121.404,coding-complete,W795_2005-07-25_USA_CA_Sacramento_-121.404_38.610.fasta
 W796,21-May,Western Scrub-Jay,corvid,blue,Tissue,100,1675.46,7/28/05,USA,CA,Sacramento,38.433,-121.328,coding-complete,W796_2005-07-28_USA_CA_Sacramento_-121.328_38.433.fasta
 W797,Jun-90,Yellow-billed Magpie,corvid,blue,Tissue,100,729.339,9/13/06,USA,CA,Sacramento,38.635,-121.466,coding-complete,W797_2006-09-13_USA_CA_Sacramento_-121.466_38.635.fasta
-W798,Jun-58,Barn Owl,hawk,yellow,Tissue,96.64,2070.39,9/14/06,USA,CA,Yolo,38.73,-121.956,coding-complete,W798_2006-09-14_USA_CA_Yolo_-121.956_38.730.fasta
+W798,Jun-58,Barn Owl,hawk,green,Tissue,96.64,2070.39,9/14/06,USA,CA,Yolo,38.73,-121.956,coding-complete,W798_2006-09-14_USA_CA_Yolo_-121.956_38.730.fasta
 W799,Jun-46,Yellow-billed Magpie,corvid,blue,Tissue,100,1006.17,6/21/06,USA,CA,Sacramento,38.723,-121.45,coding-complete,W799_2006-06-21_USA_CA_Sacramento_-121.450_38.723.fasta
 W800,5-Jun,California Scrub-Jay,corvid,blue,Tissue,99.64,640.908,7/11/06,USA,CA,Sacramento,38.705,-121.373,coding-complete,W800_2006-07-11_USA_CA_Sacramento_-121.373_38.705.fasta
 W801,Jun-41,Yellow-billed Magpie,corvid,blue,Tissue,99.09,1075.9,7/4/06,USA,CA,Sacramento,38.718,-121.406,coding-complete,W801_2006-07-04_USA_CA_Sacramento_-121.406_38.718.fasta

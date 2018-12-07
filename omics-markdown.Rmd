@@ -165,7 +165,7 @@ ggplot(segment(dend_data)) +
 library(dendextend)
 
 dend <- assign_values_to_leaves_edgePar(dend, value = colors, edgePar = "col") # add the colors.
-dend <- assign_values_to_leaves_edgePar(dend, value = 3, edgePar = "lwd") # make the lines thick
+#dend <- assign_values_to_leaves_edgePar(dend, value = 3, edgePar = "lwd") # make the lines thick
 plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
 
 
