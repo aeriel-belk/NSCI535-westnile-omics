@@ -30,6 +30,16 @@ library(leaflet)
 library(viridisLite)
 library(RColorBrewer)
 library(dendextend)
+library(seqinr)
+library(ggfortify)
+library(ggplot2)
+library(ade4)
+library(adegraphics)
+library(adegenet)
+library(spdep)
+library(dartR) 
+library(csv)
+library(gridExtra)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -116,15 +126,83 @@ wn_meta_sum_mosquitos %>%
 
 # Genomics
 ## Rebecca's part
+  The genomic data from Dr. Anderson's github page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome (see Wen et al. 2017 for a review). However, the nature of High Throughput Sequencing (HTS) technologies often results in significant variation between individual sequences due to poor quality DNA or sequencing error. So pre-processing of genomic data for quality control, and formatting is necessary before analysis may be conducted. 
+  To start, consensus sequences were aligned using R package, DECIPHER, which scanned the sequences for k-mers (regions of genetic matching) that were 11 nucleotides long and aligned the reads to each other. ShortRead was then used to trim the poor-quality ends of the sequences from bp 31 to bp 10963. Many of the resulting sequences contained an obvious excess of *Ns* which are substitutes marking for either missing data or "any nucleotide". To rectify this variation of read quality, sequences were then filtered using the python script "Sequence_cleaner.py" available on [Biopython](https://biopython.org/wiki/Sequence_Cleaner). Once, to filter out any sequences with greater than 10% *N* content or shorter than 10317 bp long (568 sequences matched this criteria). And a second, more conservative, filter criteria that removed sequences with greater than 0% *Ns* and shorter than 10317 bp in length (157 sequences matched this criteria).   
+
+```{r, eval=FALSE, include=FALSE}
+####Pre-Processing code that doesn't need to be shown#####
+cons_seq <- readDNAStringSet("consensus-seqs.fna")
+dna <- unique(cons_seq) # the unique input sequences
+index <- match(cons_seq, dna) # de-replication index
+aligned <- AlignSeqs(dna) # align the sequences directly without translation
+aligned_seq <- aligned[index]
+names(aligned_seq) <- names(cons_seq) # the re-replicated alignment
+head(aligned_seq)
+
+#Post processing 
+BrowseSeqs(aligned_seq, highlight=0) #visualize sequences in internet browser
+
+wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes" 
+
+#use shortread to trim off the ends of the data where there are a lot of missing values 
+wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
+wnv_clean
+writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
+```
+  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be more accurately described as one large group or three *genetically disctinct* populations.  
+  To answer this question, we performed a PCA analysis on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+```{r, eval=FALSE, include=FALSE}
+######Pre-Processing step for the Gein object that doens't need to be printed####
+obj <- fasta2genlight("fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
+obj.gein <- gl2gi(obj, v=1) #3Convert to a geind obj usinf dartr
+x.wnv <- tab(obj.gein, freq=TRUE, NA.method="mean") #Get rid of missing values (including NA or -) that missed filter. Otherwise the pca won't run
+
+wnv_df <- as.data.frame(x.wnv)
+wnv_df <- add_rownames(wnv_df, "sequence_id")
+write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/data/wnv_test.csv")
+#### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv
 
 
+```
+```{r, echo=FALSE}
+##PCA
+wnv_df <- read.csv("../wnv_test1.csv")
+wnv_df_pca <- wnv_df_test[c(3:157)] ##ignore the first identifier collumns for PCA
+wnv_df_pca <- as.data.frame(wnv_df_pca) 
+wnv_pca <- prcomp(wnv_df_pca)
+wnv_pca_plot <- autoplot(wnv_pca, data = wnv_df, colour = 'Population', frame=TRUE, frame.type='norm', main= "PCA of West Nile Population Structure") +theme_classic() #Run pca (prcomp) and plot grouping by pop data in original dataframe
 
+###Cali Map
+ca_base <- counties(state= c("CA"), cb= T, class= "sf")
+kern <- ca_base %>% 
+  filter(NAME == "Kern")
+kern_county <- geom_sf(data = kern, fill="brown1", alpha=.35)
 
+San_Diego <- ca_base %>% 
+  filter(NAME == "San Diego")
+San_Diego_county <- geom_sf(data = San_Diego, fill="darkorchid1", alpha=.35)
+
+Sacramento <- ca_base %>% 
+  filter( NAME=="Sacramento")
+Sacramento_county <- geom_sf(data = Sacramento, fill="cyan3", alpha=.35)
+
+county_map <- ggplot() + 
+  geom_sf(data = ca_base, color="grey")+
+  theme_bw() +
+  Sacramento_county +
+  kern_county +
+  San_Diego_county 
+
+grid.arrange(wnv_pca_plot, county_map, nrow=1)
+
+```
+
+Though there is some amount of overlap between the three populations, there is a clear amount of structure between them. Additionally, there appears to be a single individual from Kern county that does not group with the others. While this could be due to a single mutant strain, it is also very likely that this individual sample was sequenced from a vagrant host, or the sample itself was mislabeled. 
 
 ## Comparative Dendrogram
   
-  Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitos.
-  To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitos. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
+  Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
+  To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitoes. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
   
 ```{r dendrogram}
 
@@ -154,7 +232,7 @@ plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
   - Red = mosquito
   - Pink = songbird
   
-  Based on this visualization, it is clear that the sequences did cluster by origin species. There were a greater number of corvid and mosquito samples, so these are predominant on the plot, making it difficult to interpret differences in other species. Interestingly, the first break separated a group of corvids from the other species, though not all of the corvid strains were different at this break. The lower levels of the plot further separate the strains. The mosquitos all cluster together in the center of the plot, which was expected. The small group of hawk species also clusterered together, separated at lower levels from the otehrs. The songbird group is also clustered seperately, but appear to be more closely related to corvids than mosquitos, which is interesting. A deeper understanding of the relatedness of West Nile Virus between species might illuminate transmission patterns in the disease that could help researchers contain the illness and prevent futher spread.
+  Based on this visualization, it is clear that the sequences did cluster by origin species. There were a greater number of corvid and mosquito samples, so these are predominant on the plot, making it difficult to interpret differences in other species. Interestingly, the first break separated a group of corvids from the other species, though not all of the corvid strains were different at this break. The lower levels of the plot further separate the strains. The mosquitoes all cluster together in the center of the plot, which was expected. The small group of hawk species also clustered together, separated at lower levels from the others. The songbird group is also clustered separately, but appear to be more closely related to corvids than mosquitoes, which is interesting. A deeper understanding of the relatedness of West Nile Virus between species might illuminate transmission patterns in the disease that could help researchers contain the illness and prevent further spread.
   
 *******************************************************************************
   
