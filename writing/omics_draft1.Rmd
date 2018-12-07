@@ -1,5 +1,5 @@
 ---
-title: "wnv_omics_pretty"
+title: "wnv_omics_draft_1"
 author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, & Kyle Root"
 date: "December 5, 2018"
 output: html_document
@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FA
 options(readr.show_progress = FALSE)
 ```
 
-```{r libraries}
+```{r libraries, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(ggthemes)
 library(seqinr)
@@ -40,6 +40,12 @@ library(spdep)
 library(dartR) 
 library(csv)
 library(gridExtra)
+library(stringr)
+library(sf)
+library(ape)
+library(ShortRead)
+library(ggmap)
+library(tigris)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -68,7 +74,7 @@ library(DECIPHER)
 Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__.   
 
 ```{r county_metadata}
-wn_meta_filtered <- read.csv("../metadata/metadata.csv") %>% 
+wn_meta_filtered <- read.csv("../data/metadata/metadata.csv") %>% 
   select(Scripps.ID, Species, Sample.type, Collection.date, County, Latitude, Longitude)
 
 wn_meta_sum_county <- wn_meta_filtered %>% 
@@ -131,7 +137,7 @@ wn_meta_sum_mosquitos %>%
 
 ```{r, eval=FALSE, include=FALSE}
 ####Pre-Processing code that doesn't need to be shown#####
-cons_seq <- readDNAStringSet("consensus-seqs.fna")
+cons_seq <- readDNAStringSet("../data/consensus-seqs.fna")
 dna <- unique(cons_seq) # the unique input sequences
 index <- match(cons_seq, dna) # de-replication index
 aligned <- AlignSeqs(dna) # align the sequences directly without translation
@@ -147,13 +153,13 @@ wnv_adjusted <- AdjustAlignment(aligned_seq)  #fixes any "obvious mistakes"
 #use shortread to trim off the ends of the data where there are a lot of missing values 
 wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
 wnv_clean
-writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
+writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
-  To answer this question,a PCA analysis wa performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
-```{r, eval=FALSE, include=FALSE}
+  To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ######Pre-Processing step for the Gein object that doens't need to be printed####
-obj <- fasta2genlight("fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
+obj <- fasta2genlight("../data/fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
 obj.gein <- gl2gi(obj, v=1) #3Convert to a geind obj usinf dartr
 x.wnv <- tab(obj.gein, freq=TRUE, NA.method="mean") #Get rid of missing values (including NA or -) that missed filter. Otherwise the pca won't run
 
@@ -167,7 +173,7 @@ write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/da
 ```{r, echo=FALSE}
 ##PCA
 wnv_df <- read.csv("../data/wnv_test1.csv")
-wnv_df_pca <- wnv_df_test[c(3:157)] ##ignore the first identifier collumns for PCA
+wnv_df_pca <- wnv_df[c(3:157)] ##ignore the first identifier collumns for PCA
 wnv_df_pca <- as.data.frame(wnv_df_pca) 
 wnv_pca <- prcomp(wnv_df_pca)
 wnv_pca_plot <- autoplot(wnv_pca, data = wnv_df, colour = 'Population', frame=TRUE, frame.type='norm', main= "PCA of West Nile Population Structure") +theme_classic() #Run pca (prcomp) and plot grouping by pop data in original dataframe
@@ -185,10 +191,10 @@ San_Diego_county <- geom_sf(data = San_Diego, fill="darkorchid1", alpha=.35)
 Sacramento <- ca_base %>% 
   filter( NAME=="Sacramento")
 Sacramento_county <- geom_sf(data = Sacramento, fill="cyan3", alpha=.35)
-
+  
 county_map <- ggplot() + 
   geom_sf(data = ca_base, color="grey")+
-  theme_bw() +
+  theme_minimal() +
   Sacramento_county +
   kern_county +
   San_Diego_county 
@@ -207,10 +213,10 @@ Though there is some amount of overlap between the three populations, there is a
 ```{r dendrogram}
 
 # import dataset that Rebecca made:
-clean_seq <- readDNAStringSet("../fasta/clear_wnv_clean.fas")
+clean_seq <- readDNAStringSet("../data/fasta/clear_wnv_clean.fas")
 
 #import metadata
-metadataframe <- read_csv('../metadata/metadata.csv')
+metadataframe <- read_csv('../data/metadata/metadata.csv')
 metadataframe <- metadataframe %>% 
   rename_all(tolower)
 
