@@ -135,6 +135,7 @@ clean_seq <- readDNAStringSet("../fasta/clear_wnv_clean.fas")
 metadataframe <- read_csv('../metadata/metadata.csv')
 metadataframe <- metadataframe %>% 
   rename_all(tolower)
+colors <- metadataframe$color
 
 # unmasked clustering
 sdist <- stringDist(as(clean_seq,"DNAStringSet"), method="hamming")
