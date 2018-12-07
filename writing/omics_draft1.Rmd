@@ -166,7 +166,7 @@ write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/da
 ```
 ```{r, echo=FALSE}
 ##PCA
-wnv_df <- read.csv("../wnv_test1.csv")
+wnv_df <- read.csv("../data/wnv_test1.csv")
 wnv_df_pca <- wnv_df_test[c(3:157)] ##ignore the first identifier collumns for PCA
 wnv_df_pca <- as.data.frame(wnv_df_pca) 
 wnv_pca <- prcomp(wnv_df_pca)
