@@ -51,7 +51,10 @@ library(tigris)
 library(knitr)
 library(ggplot2)
 library(sf)
+library(ggdendro)
 library(leaflet)
+library(viridisLite)
+library(RColorBrewer)
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
@@ -59,19 +62,25 @@ library(leaflet)
 
 library(Biostrings)
 
-if (!requireNamespace("BiocManager", quietly=TRUE))
-install.packages("BiocManager")
-BiocManager::install("msa")
+# if (!requireNamespace("BiocManager", quietly=TRUE))
+# install.packages("BiocManager")
+# BiocManager::install("msa")
 
 library(msa)
 
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# BiocManager::install("DECIPHER", version = "3.8")
+library(DECIPHER)
+
+            
 ```
 
 ``` {r metadata formatting}
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
 
-metadataframe <- read_csv(metadata_url)
-metadataframe <- metadataframe%>% 
+metadataframe <- read_csv('metadata/metadata.csv')
+metadataframe <- metadataframe %>% 
   rename_all(tolower)
 
 ```
@@ -121,6 +130,45 @@ aligned <- DNAMultipleAlignment(fasta2)
 
 aligned2 <- readDNAMultipleAlignment('consensus_sequences', 'fasta')
 # got output with 0 rows, but a start!
+## This was all bad.
+
+## Starting from Rebecca's work here ##
+clean_seq <- readDNAStringSet("fasta/clear_wnv_clean.fas")
+
+# trying clustering on unmasked
+sdist <- stringDist(as(clean_seq,"DNAStringSet"), method="hamming")
+clust <- hclust(sdist, method = "ward.D2")
+
+clust_df <- data_frame(sample = metadataframe, cluster = clust)
+
+
+## other ggplot method
+dend <- as.dendrogram(clust)
+dend_data <- dendro_data(dend, type = 'rectangle')
+  
+unique(metadataframe$species_type)
+
+colors <- metadataframe %>% 
+  mutate(color = species_type %in% 'corvid' )
+
+colors <- metadataframe$color
+
+ggplot(segment(dend_data)) +
+  geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) +
+  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) +
+  theme_dendro()
+
+
+## Try without ggplot
+#install.packages('dendextend')
+library(dendextend)
+
+dend <- assign_values_to_leaves_edgePar(dend, value = colors, edgePar = "col") # add the colors.
+#dend <- assign_values_to_leaves_edgePar(dend, value = 3, edgePar = "lwd") # make the lines thick
+plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
+
+
 
 ```
   
@@ -184,14 +232,24 @@ ggplot() +
 popup_info <- paste0("<b>Species:</b>  ", 
                                   ca_wnv$species, "<br/>",
                                   "<b>Season:</b>  ",
-                                  ca_wnv$season)
+                                  ca_wnv$season, "<br/>",
+                                  "<b>Year:</b>  ",
+                                  ca_wnv$year)
+season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
+                             ca_wnv$season)
 
 leaflet() %>% 
   addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addPolygons(data = ca_counties,
+              group = "tracts") %>% 
   addCircleMarkers(data = ca_wnv, radius = 2,
                    lng = ~ longitude, lat = ~ latitude,
                    popup = popup_info,
-                   clusterOptions = markerClusterOptions())
+                   color = season_pallet(ca_wnv$season),
+                   group = "infections",
+                   clusterOptions = markerClusterOptions()) %>%
+  addLayersControl(baseGroups = c("Base Map"),
+                   overlayGroups = c("Tracts", "Infections"))
 
 ```
   
@@ -300,13 +358,21 @@ freqs <- alphabetFrequency(DNAStringSet(cons_seq[!is.na(cons_seq)]), baseOnly=TR
 head(freqs)
 
 
+##DECIPHER package for aligning raw sequences to eachother based on similarity
+## Note- don't have to run this code, Rebecca made a 
+
 ##DECIPHER package for sequence alignment  
 library(DECIPHER)
 dna <- unique(cons_seq) # the unique input sequences
 index <- match(cons_seq, dna) # de-replication index
+<<<<<<< HEAD
 aligned <- AlignSeqs(dna) # align the sequences directly without translation
 aligned_seq <- aligned[index]
 names(aligned_seq) <- names(cons_seq) # the re-replicated alignment
+aligned_seq <- AlignSeqs(cons_seq) # align the sequences directly without translation
+aligned_seq <- U_DNA[index]
+names(cons_seq) <- names(cons_seq) # the re-replicated alignment
+
 head(aligned_seq)
 
 #Post processing 
