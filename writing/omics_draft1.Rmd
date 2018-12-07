@@ -115,6 +115,13 @@ wn_meta_sum_mosquitos %>%
 ********************************************************************************
 
 # Genomics
+## Rebecca's part
+
+
+
+
+
+## Comparative Dendrogram
   
   Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitos.
   To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitos. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
