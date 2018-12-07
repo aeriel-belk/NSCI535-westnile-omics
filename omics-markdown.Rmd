@@ -73,9 +73,6 @@ library(msa)
 # BiocManager::install("DECIPHER", version = "3.8")
 library(DECIPHER)
 
-install.packages('devtools')
-devtools::install_github(repo = 'satijalab/seurat', ref = 'release/3.0')
-library(Seurat)
             
 ```
 
@@ -154,20 +151,23 @@ unique(metadataframe$species_type)
 colors <- metadataframe %>% 
   mutate(color = species_type %in% 'corvid' )
 
+colors <- metadataframe$color
+
 ggplot(segment(dend_data)) +
-  geom_segment(aes(x = x, y = y, xend = xend, yend = yend, color = metadataframe$Species)) +
+  geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) +
   coord_flip() +
   scale_y_reverse(expand = c(0.2, 0)) +
   theme_dendro()
 
 
 ## Try without ggplot
-install.packages('dendextend')
+#install.packages('dendextend')
 library(dendextend)
 
 dend <- assign_values_to_leaves_edgePar(dend, value = colors, edgePar = "col") # add the colors.
 dend <- assign_values_to_leaves_edgePar(dend, value = 3, edgePar = "lwd") # make the lines thick
-plot(dend, leaflab = 'none', horiz = TRUE)
+plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
+
 
 
 ```
