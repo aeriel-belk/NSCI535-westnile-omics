@@ -149,8 +149,8 @@ wnv_clean <- DNAStringSet(substr(wnv_adjusted,31,10963))
 wnv_clean
 writeXStringSet(wnv_clean,file="wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
-  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be more accurately described as one large group or three *genetically disctinct* populations.  
-  To answer this question, we performed a PCA analysis on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
+  To answer this question,a PCA analysis wa performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
 ```{r, eval=FALSE, include=FALSE}
 ######Pre-Processing step for the Gein object that doens't need to be printed####
 obj <- fasta2genlight("fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
@@ -160,7 +160,7 @@ x.wnv <- tab(obj.gein, freq=TRUE, NA.method="mean") #Get rid of missing values (
 wnv_df <- as.data.frame(x.wnv)
 wnv_df <- add_rownames(wnv_df, "sequence_id")
 write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/data/wnv_test.csv")
-#### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv
+#### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv.
 
 
 ```
@@ -235,7 +235,9 @@ plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
   Based on this visualization, it is clear that the sequences did cluster by origin species. There were a greater number of corvid and mosquito samples, so these are predominant on the plot, making it difficult to interpret differences in other species. Interestingly, the first break separated a group of corvids from the other species, though not all of the corvid strains were different at this break. The lower levels of the plot further separate the strains. The mosquitoes all cluster together in the center of the plot, which was expected. The small group of hawk species also clustered together, separated at lower levels from the others. The songbird group is also clustered separately, but appear to be more closely related to corvids than mosquitoes, which is interesting. A deeper understanding of the relatedness of West Nile Virus between species might illuminate transmission patterns in the disease that could help researchers contain the illness and prevent further spread.
   
 *******************************************************************************
-  
+
+Literature Cited 
+Wen C, Wu L, Qin Y, Van Nostrand JD, Ning D, Sun B, Xue K, Liu F, Deng Y, Liang Y, Zhou J.2017. Evaluation of the reproducibility of amplicon sequencing with Illumina MiSeq platform. PLoS ONE 12(4): e0176716. https://doi.org/10.1371/journal.pone.0176716
   
 
 
