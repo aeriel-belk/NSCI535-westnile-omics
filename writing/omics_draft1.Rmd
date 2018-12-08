@@ -1,15 +1,15 @@
 ---
-title: "wnv_omics_draft_1"
+title: "West Nile Virus Genetic Diversity in California - DRAFT"
 author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, & Kyle Root"
 date: "December 5, 2018"
-output: html_document
+output: pdf_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = FALSE)
 options(readr.show_progress = FALSE)
 ```
 
-```{r libraries, message=FALSE, warning=FALSE, include=FALSE}
+```{r libraries}
 library(tidyverse)
 library(ggthemes)
 library(seqinr)
@@ -45,35 +45,15 @@ library(sf)
 library(ape)
 library(ShortRead)
 library(ggmap)
-library(tigris)
-
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-#    install.packages("BiocManager")
-# BiocManager::install("Biostrings", versilibrary(devtools) on = "3.8"
-
 library(Biostrings)
-
-# if (!requireNamespace("BiocManager", quietly=TRUE))
-# install.packages("BiocManager")
-# BiocManager::install("msa")
-
 library(msa)
-
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-#     install.packages("BiocManager")
-# BiocManager::install("DECIPHER", version = "3.8")
 library(DECIPHER)
-
-
 ```
 
-# Introduction
+# Sample Collection
+Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__ in multiple locations with varying degrees of urbanization.  Samples appear to have been collected by the researchers or submitted by other parties.  Metadata reflecting the amount of samples collected from each county and each species, either avians or pooled mosquitoes, was examined to determine the potential for bias. 
 
-
-## Sample Collection
-Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__.   
-
-```{r county_metadata}
+```{r county_metadata, fig.height = 5.5, fig.width = 5}
 wn_meta_filtered <- read.csv("../data/metadata/metadata.csv") %>% 
   select(Scripps.ID, Species, Sample.type, Collection.date, County, Latitude, Longitude)
 
@@ -92,8 +72,9 @@ wn_meta_sum_county %>%
   labs(title = "Samples collected by county", x = NULL, y = "# of samples")
 ```
 
+The majority of samples were collected from two counties, Kern and San Diego.  What effect this may have on the results is unknown.  However, if a particular strain of virus were more prevalent in these areas then the data would not be representative of West Nile Virus variation across all of California.  Furthermore, other variables related to geographical location may be impacting the data.
 
-```{r bird_metadata}
+```{r bird_metadata, fig.height = 5, fig.width = 5}
 wn_meta_sum_species <- wn_meta_filtered %>% 
   filter(Sample.type == "Tissue") %>% 
   group_by(Species) %>% 
@@ -189,9 +170,13 @@ leaflet() %>%
   addLayersControl(baseGroups = c("Base Map"),
                    overlayGroups = c("Tracts", "Infections"))
 
+<<<<<<< HEAD
 ```
 
 ```{r mosquito_metadata}
+=======
+```{r mosquito_metadata, fig.height = 2, fig.width = 5}
+>>>>>>> eb6dd70cbabc9928dd87c681a5f3997e1bfb0b97
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
   filter(Sample.type == "Pooled mosquitos") %>% 
   group_by(Species) %>% 
@@ -208,15 +193,17 @@ wn_meta_sum_mosquitos %>%
   labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")    
 ```
 
+The above graphs demonstrate the variation in samples collected from either bird species or the pooled mosquito populations.  It is very interesting to note that most samples were collected from the American Crow.  Some literature suggests an overall high prevalence of West Nile Virus in corvids.  The American Crow is considered the third highest avian species for West Nile Virus prevalence behind Yellow-billed Magpies and Western Scrub-jays.  However, this data suggests American Crows have a higher prevalence of the virus.  This could be resulting from a disproportionate amount of American Crow samples submitted.
+
 ********************************************************************************
 
 # Genomics
-## Rebecca's part
   
-  The genomic data from Dr. Anderson's github page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome (see Wen et al. 2017 for a review). However, the nature of High Throughput Sequencing (HTS) technologies often results in significant variation between individual sequences due to poor quality DNA or sequencing error. So pre-processing of genomic data for quality control, and formatting is necessary before analysis may be conducted. 
+  The genomic data from Dr. Andersen's git hub page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome (see Wen et al. 2017 for a review). However, the nature of High Throughput Sequencing (HTS) technologies often results in significant variation between individual sequences due to poor quality DNA or sequencing error. So pre-processing of genomic data for quality control, and formatting is necessary before analysis may be conducted. 
   To start, consensus sequences were aligned using R package, DECIPHER, which scanned the sequences for k-mers (regions of genetic matching) that were 11 nucleotides long and aligned the reads to each other. ShortRead was then used to trim the poor-quality ends of the sequences from bp 31 to bp 10963. Many of the resulting sequences contained an obvious excess of *Ns* which are substitutes marking for either missing data or "any nucleotide". To rectify this variation of read quality, sequences were then filtered using the python script "Sequence_cleaner.py" available on [Biopython](https://biopython.org/wiki/Sequence_Cleaner). Once, to filter out any sequences with greater than 10% *N* content or shorter than 10317 bp long (568 sequences matched this criteria). And a second, more conservative, filter criteria that removed sequences with greater than 0% *Ns* and shorter than 10317 bp in length (157 sequences matched this criteria).   
 
-```{r, eval=FALSE, include=FALSE}
+```{r, eval = FALSE, include = FALSE, results = "hide"}
+options(readr.show_progress = FALSE)
 ####Pre-Processing code that doesn't need to be shown#####
 cons_seq <- readDNAStringSet("../data/consensus-seqs.fna")
 dna <- unique(cons_seq) # the unique input sequences
@@ -237,11 +224,12 @@ wnv_clean
 writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
   
-  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
+  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically distinct* populations.  
   To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
    
    
-```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r, eval = FALSE, message = FALSE, warning = FALSE, include = FALSE, results = "hide"}
+options(readr.show_progress = FALSE)
 ######Pre-Processing step for the Gein object that doens't need to be printed####
 obj <- fasta2genlight("../data/fasta/wnv_cleanest.fas", chunk=10, parallel = F) ##Create genlight object which conserves polymorphic sites 
 obj.gein <- gl2gi(obj, v=1) #3Convert to a geind obj usinf dartr
@@ -251,10 +239,10 @@ wnv_df <- as.data.frame(x.wnv)
 wnv_df <- add_rownames(wnv_df, "sequence_id")
 write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/data/wnv_test.csv")
 #### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv.
-
-
 ```
-```{r, echo=FALSE}
+
+```{r, echo = FALSE, results = "hide", fig.height = 3.5, fig.width = 6}
+options(readr.show_progress = FALSE)
 ##PCA
 wnv_df <- read.csv("../data/wnv_test1.csv")
 wnv_df_pca <- wnv_df[c(3:157)] ##ignore the first identifier collumns for PCA
@@ -294,7 +282,7 @@ Though there is some amount of overlap between the three populations, there is a
   Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
   To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitoes. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
   
-```{r dendrogram}
+```{r dendrogram, fig.height = 6, fig.width = 6}
 
 # import dataset that Rebecca made:
 clean_seq <- readDNAStringSet("../data/fasta/clear_wnv_clean.fas")
