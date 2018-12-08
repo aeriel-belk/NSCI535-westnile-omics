@@ -97,7 +97,13 @@ wn_meta_sum_species %>%
 ```{r mapped_plot}
 
 #Tidy data for county map with infections by season
-ca_wnv <- metadataframe %>% 
+metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
+
+metaframe <- read_csv("../data/metadata/metadata.csv")
+metaframe <- metaframe %>% 
+  rename_all(tolower)
+
+ca_wnv <- metaframe %>% 
   select("species", "collection date",
            "county", "latitude", "longitude") %>% 
   rename_all(funs(str_replace(., "\\s", "_"))) %>% 
@@ -116,6 +122,7 @@ ca_wnv <- metadataframe %>%
   mutate(species = fct_lump(species,
                                 n = 4))
 
+#Table summary of infections by season/species
 species_summary <- ca_wnv %>% 
   group_by(species) %>% 
   summarize(species_no = n())
@@ -170,13 +177,9 @@ leaflet() %>%
   addLayersControl(baseGroups = c("Base Map"),
                    overlayGroups = c("Tracts", "Infections"))
 
-<<<<<<< HEAD
 ```
 
-```{r mosquito_metadata}
-=======
 ```{r mosquito_metadata, fig.height = 2, fig.width = 5}
->>>>>>> eb6dd70cbabc9928dd87c681a5f3997e1bfb0b97
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
   filter(Sample.type == "Pooled mosquitos") %>% 
   group_by(Species) %>% 
