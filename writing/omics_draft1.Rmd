@@ -178,7 +178,7 @@ leaflet() %>%
                    overlayGroups = c("Tracts", "Infections"))
 
 ```
-
+##From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occuring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.##
 ```{r mosquito_metadata, fig.height = 2, fig.width = 5}
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
   filter(Sample.type == "Pooled mosquitos") %>% 
