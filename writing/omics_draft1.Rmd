@@ -109,7 +109,87 @@ wn_meta_sum_species %>%
   theme_minimal() +
   labs(title = "Samples collected by bird species", x = NULL, y = "# of samples")    
 ```
+********************************************************************************
+#Interactive map displaying seasonal infection by species  
+*Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
 
+```{r mapped_plot}
+
+#Tidy data for county map with infections by season
+ca_wnv <- metadataframe %>% 
+  select("species", "collection date",
+           "county", "latitude", "longitude") %>% 
+  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
+  separate(col = collection_date, 
+           into = c("month", "day", "year"),
+           sep = "/") %>% 
+  mutate(month = factor(month),
+         season = fct_collapse(month,
+               winter = c("12", "1", "2"),
+               spring = c("3", "4", "5"),
+               summer = c("6", "7", "8"),
+               fall = c("9", "10", "11"))) %>% 
+  mutate(latitude = as.numeric(latitude)) %>% 
+  mutate(longitude = as.numeric(longitude)) %>% 
+  na.omit() %>% 
+  mutate(species = fct_lump(species,
+                                n = 4))
+
+species_summary <- ca_wnv %>% 
+  group_by(species) %>% 
+  summarize(species_no = n())
+season_summary <- ca_wnv %>% 
+  group_by(season) %>% 
+  summarize(no_infections = n())
+kable(species_summary,
+      col.names = c("Species", "Number Infected"))
+kable(season_summary,
+      col.names = c("Season", "Number of Cases"))
+
+#Creating CA sf boundaries
+ca_wnv_sf <- st_as_sf(ca_wnv, 
+                      coords = c("longitude", "latitude"),
+                      crs = 4269)
+ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
+co_tracts <- tracts(state = 06, cb = TRUE, class = "sf")
+
+#Plot to show relation of infections to water area 
+ggplot() +
+  geom_sf(data = ca_counties, aes(fill = AWATER),
+          alpha = 0.5) +
+  geom_sf(data = ca_wnv_sf, aes(color = season,
+                                shape = species)) +
+  scale_fill_viridis_c(name = "Area of Water") +
+  facet_wrap(.~season) +
+  ggtitle("California West Nile Virus Infections") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  scale_x_continuous()
+
+#Leaflet graph
+popup_info <- paste0("<b>Species:</b>  ", 
+                                  ca_wnv$species, "<br/>",
+                                  "<b>Season:</b>  ",
+                                  ca_wnv$season, "<br/>",
+                                  "<b>Year:</b>  ",
+                                  ca_wnv$year)
+season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
+                             ca_wnv$season)
+
+leaflet() %>% 
+  addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addPolygons(data = ca_counties,
+              group = "tracts") %>% 
+  addCircleMarkers(data = ca_wnv, radius = 2,
+                   lng = ~ longitude, lat = ~ latitude,
+                   popup = popup_info,
+                   color = season_pallet(ca_wnv$season),
+                   group = "infections",
+                   clusterOptions = markerClusterOptions()) %>%
+  addLayersControl(baseGroups = c("Base Map"),
+                   overlayGroups = c("Tracts", "Infections"))
+
+```
 
 ```{r mosquito_metadata}
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
