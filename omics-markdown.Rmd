@@ -217,6 +217,7 @@ ca_wnv_sf <- st_as_sf(ca_wnv,
 ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
 co_tracts <- tracts(state = 06, cb = TRUE, class = "sf")
 
+#Plot to show relation of infections to water area 
 ggplot() +
   geom_sf(data = ca_counties, aes(fill = AWATER),
           alpha = 0.5) +
@@ -226,7 +227,8 @@ ggplot() +
   facet_wrap(.~season) +
   ggtitle("California West Nile Virus Infections") +
   xlab("Longitude") +
-  ylab("Latitude")
+  ylab("Latitude") +
+  scale_x_continuous()
 
 #Leaflet graph
 popup_info <- paste0("<b>Species:</b>  ", 
