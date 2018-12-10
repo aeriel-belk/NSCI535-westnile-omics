@@ -56,7 +56,7 @@ library(DECIPHER)
 ```
 
 # Sample Collection
-Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__ in multiple locations with varying degrees of urbanization.  Samples appear to have been collected by the researchers or submitted by other parties.  Metadata reflecting the amount of samples collected from each county and each species, either avians or pooled mosquitoes, was examined to determine the potential for bias. 
+Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__ in multiple locations with varying degrees of urbanization.  Samples appear to have been collected by the researchers or submitted by other parties.  Metadata reflecting the amount of samples collected from each county and each species, either avians or pooled mosquitoes, was examined to determine the potential for bias. Data was collected from 2004 to 2017
 
 ```{r county_metadata, fig.height = 5.5, fig.width = 5}
 wn_meta_filtered <- read.csv("../data/metadata/metadata.csv") %>% 
@@ -127,7 +127,7 @@ ca_wnv <- metaframe %>%
   mutate(longitude = as.numeric(longitude)) %>% 
   na.omit() %>% 
   mutate(species = fct_lump(species,
-                                n = 4))
+                                n = 4)) 
 
 #Table summary of infections by season/species
 species_summary <- ca_wnv %>% 
@@ -154,13 +154,13 @@ ggplot() +
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season,
                                 shape = species)) +
-  scale_fill_viridis_c(name = "Area of Water") +
+  scale_fill_viridis_c() +
   facet_wrap(.~season) +
   ggtitle("California West Nile Virus Infections") +
   xlab("Longitude") +
   ylab("Latitude") +
   scale_x_continuous() +
-  theme(axis.text.x = element_text(angle = 45))
+  theme(axis.text.x = element_text(angle = 45)) 
 
 #Leaflet graph
 popup_info <- paste0("<b>Species:</b>  ", 
