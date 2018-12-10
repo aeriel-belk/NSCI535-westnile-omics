@@ -152,7 +152,8 @@ ggplot() +
   ggtitle("California West Nile Virus Infections") +
   xlab("Longitude") +
   ylab("Latitude") +
-  scale_x_continuous()
+  scale_x_continuous() +
+  theme(axis.text.x = element_text(angle = 45))
 
 #Leaflet graph
 popup_info <- paste0("<b>Species:</b>  ", 
