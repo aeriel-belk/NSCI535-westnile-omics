@@ -47,6 +47,11 @@ library(ShortRead)
 library(ggmap)
 library(Biostrings)
 library(msa)
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# BiocManager::install("DECIPHER", version = "3.8")
+
 library(DECIPHER)
 ```
 
@@ -70,9 +75,10 @@ wn_meta_sum_county %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Samples collected by county", x = NULL, y = "# of samples")
+
 ```
 
-The majority of samples were collected from two counties, Kern and San Diego.  What effect this may have on the results is unknown.  However, if a particular strain of virus were more prevalent in these areas then the data would not be representative of West Nile Virus variation across all of California.  Furthermore, other variables related to geographical location may be impacting the data.
+  The majority of samples were collected from two counties, Kern and San Diego.  What effect this may have on the results is unknown.  However, if a particular strain of virus were more prevalent in these areas then the data would not be representative of West Nile Virus variation across all of California.  Furthermore, other variables related to geographical location may be impacting the data.
 
 ```{r bird_metadata, fig.height = 5, fig.width = 5}
 wn_meta_sum_species <- wn_meta_filtered %>% 
@@ -89,10 +95,12 @@ wn_meta_sum_species %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Samples collected by bird species", x = NULL, y = "# of samples")    
+
 ```
+  
 ********************************************************************************
-#Interactive map displaying seasonal infection by species  
-*Amanda tenative plan to make an interactive map characterizing WNV infections by season, species*
+# Interactive map displaying seasonal infection by species  
+
 
 ```{r mapped_plot}
 
@@ -179,7 +187,8 @@ wnv_interactive <- leaflet() %>%
                    overlayGroups = c("Tracts", "Infections"))
 wnv_interactive
 ```
-##From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occuring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.##
+  
+  From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occuring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
 
 ```{r mosquito_metadata, fig.height = 2, fig.width = 5}
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
@@ -195,7 +204,8 @@ wn_meta_sum_mosquitos %>%
   geom_point() +
   coord_flip() +
   theme_minimal() +
-  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")    
+  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")  
+
 ```
 
 The above graphs demonstrate the variation in samples collected from either bird species or the pooled mosquito populations.  It is very interesting to note that most samples were collected from the American Crow.  Some literature suggests an overall high prevalence of West Nile Virus in corvids.  The American Crow is considered the third highest avian species for West Nile Virus prevalence behind Yellow-billed Magpies and Western Scrub-jays.  However, this data suggests American Crows have a higher prevalence of the virus.  This could be resulting from a disproportionate amount of American Crow samples submitted.
@@ -229,8 +239,13 @@ wnv_clean
 writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
   
+
+  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
+  To answer this question, a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically distinct* populations.  
   To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+
    
    
 ```{r, eval = FALSE, message = FALSE, warning = FALSE, include = FALSE, results = "hide"}
