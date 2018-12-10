@@ -109,6 +109,7 @@ wn_meta_sum_species %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Samples collected by bird species", x = NULL, y = "# of samples")    
+
 ```
 
 
@@ -126,7 +127,8 @@ wn_meta_sum_mosquitos %>%
   geom_point() +
   coord_flip() +
   theme_minimal() +
-  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")    
+  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")  
+
 ```
 
 ********************************************************************************
