@@ -182,6 +182,8 @@ wnv_interactive <- leaflet() %>%
                    color = season_pallet(ca_wnv$season),
                    group = "infections",
                    clusterOptions = markerClusterOptions()) %>%
+  addLegend(pal = season_pallet, values = ca_wnv$season,
+            opacity = 0.5) %>% 
   addLayersControl(baseGroups = c("Base Map"),
                    overlayGroups = c("Tracts", "Infections"))
 wnv_interactive
