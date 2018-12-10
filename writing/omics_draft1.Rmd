@@ -106,7 +106,6 @@ wn_meta_sum_species %>%
 
 #Tidy data for county map with infections by season
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
-
 metaframe <- read_csv("../data/metadata/metadata.csv")
 metaframe <- metaframe %>% 
   rename_all(tolower)
@@ -186,9 +185,10 @@ wnv_interactive <- leaflet() %>%
   addLayersControl(baseGroups = c("Base Map"),
                    overlayGroups = c("Tracts", "Infections"))
 wnv_interactive
+saveWidget(wnv_interactive, 'mapca.html', selfcontained = TRUE)
 ```
   
-  From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occuring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
+When I created this plot the questions I was trying to answer were: does WNV infection occur in one species preferentially? Does this occur at a specific time of year? Does the amount of water available in an area affect this occurance? From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer (71%). There are quite a few infections occuring in the fall (20%), and almost none in the spring or winter. WNV infections are also clustered toward the southern portions of the state, while there are few indicences of infection in the northern portion of the state. The data also shows that the american crow (32%) is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
 
 ```{r mosquito_metadata, fig.height = 2, fig.width = 5}
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
