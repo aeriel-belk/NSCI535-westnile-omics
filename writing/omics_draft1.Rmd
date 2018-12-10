@@ -175,17 +175,18 @@ season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
 wnv_interactive <- leaflet() %>% 
   addProviderTiles("Esri.NatGeoWorldMap") %>% 
   addPolygons(data = ca_counties,
-              group = "tracts") %>% 
+              group = "Tracts") %>% 
   addCircleMarkers(data = ca_wnv, radius = 2,
                    lng = ~ longitude, lat = ~ latitude,
                    popup = popup_info,
                    color = season_pallet(ca_wnv$season),
-                   group = "infections",
+                   group = "Infections",
                    clusterOptions = markerClusterOptions()) %>%
   addLegend(pal = season_pallet, values = ca_wnv$season,
             opacity = 0.5) %>% 
   addLayersControl(baseGroups = c("Base Map"),
-                   overlayGroups = c("Tracts", "Infections"))
+                   overlayGroups = c("Tracts", "Infections"),
+                   options = layersControlOptions(collapsed = TRUE))
 wnv_interactive
 saveWidget(wnv_interactive, 'mapca.html', selfcontained = TRUE)
 ```
