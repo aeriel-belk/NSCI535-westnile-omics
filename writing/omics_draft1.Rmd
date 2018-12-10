@@ -62,6 +62,7 @@ library(msa)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
 # BiocManager::install("DECIPHER", version = "3.8")
+
 library(DECIPHER)
 
 
@@ -157,7 +158,7 @@ writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Wr
 ```
   
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
-  To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+  To answer this question, a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
    
    
 ```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
