@@ -8,7 +8,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = FALSE)
 options(readr.show_progress = FALSE)
 ```
+#Introduction#
 
+The following project aims to characterize the genomic data of West Nile Virus infections. It took us about a few days to figure out how we were going to approach such a project, and a few more days before we found a viable dataset to use to accomplish our project goals. The data set found and used in this genomic project characterizing West Nile Virus our group used a data set published through Dr. Andersen github: https://github.com/andersen-lab/west-nile. Once our group was assigned found usable data we developed an overarching question that we wanted our project to answer: How do infection rates and genetic structure vary within West Nile Virus in California? We now had a very large dataset with information on species, location, date, and sequence that could be used to answer a small set of questions we proposed to answer for this project. 
 ```{r libraries}
 library(tidyverse)
 library(ggthemes)
