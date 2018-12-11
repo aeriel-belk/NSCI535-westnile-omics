@@ -366,6 +366,6 @@ plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
 
 Challenges
 
-The genomic data was in FASTA format which includes only sequence ID information and the genetic data. This forced us to use python to filter our data before it could be analyzed since most R Packages that filter sequences need some sort of qulaity information emedded in the file as FASTQ format, or raw reads from the sequencers. In future, we will bear in mind that FASTA files are only useful to strict R users if read quality information is included.  
+The genomic data was in FASTA format which includes only sequence ID information and the genetic data. This forced us to use python to filter our data before it could be analyzed since most R Packages that filter sequences need some sort of qulaity information emedded in the file as FASTQ format, or raw reads from the sequencers. In future, we will bear in mind that FASTA files are only useful to strict R users if read quality information is included. There are many crs codes for California, which presented a challenge when it came to mapping the infection data to CA geometry. This took a lot of guessing before Dr. Anderson was able to show me a function that can return the crs code being used for the CA geometry, and therefore could be used for the infection locations. 
 
 
