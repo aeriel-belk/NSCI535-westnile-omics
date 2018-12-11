@@ -98,10 +98,30 @@ wn_meta_sum_species %>%
 
 ```
   
+
+```{r mosquito_metadata, fig.height = 2, fig.width = 5}
+wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
+  filter(Sample.type == "Pooled mosquitos") %>% 
+  group_by(Species) %>% 
+  summarize(
+    n = n()) %>% 
+  ungroup()
+
+wn_meta_sum_mosquitos %>%
+  mutate(Species = fct_reorder(Species, n)) %>% 
+  ggplot(aes(x = Species, y = n)) +
+  geom_point() +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")  
+
+```
+
+The above graphs demonstrate the variation in samples collected from either bird species or the pooled mosquito populations.  It is very interesting to note that most samples were collected from the American Crow.  Some literature suggests an overall high prevalence of West Nile Virus in corvids.  The American Crow is considered the third highest avian species for West Nile Virus prevalence behind Yellow-billed Magpies and Western Scrub-jays.  However, this data suggests American Crows have a higher prevalence of the virus.  This could be resulting from a disproportionate amount of American Crow samples submitted.
+
 ********************************************************************************
+
 # Interactive map displaying seasonal infection by species  
-
-
 ```{r mapped_plot}
 
 #Tidy data for county map with infections by season
@@ -190,30 +210,9 @@ saveWidget(wnv_interactive, 'mapca.html', selfcontained = TRUE)
   
 When I created this plot the questions I was trying to answer were: does WNV infection occur in one species preferentially? Does this occur at a specific time of year? Does the amount of water available in an area affect this occurance? From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer (71%). There are quite a few infections occuring in the fall (20%), and almost none in the spring or winter. WNV infections are also clustered toward the southern portions of the state, while there are few indicences of infection in the northern portion of the state. The data also shows that the american crow (32%) is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
 
-```{r mosquito_metadata, fig.height = 2, fig.width = 5}
-wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
-  filter(Sample.type == "Pooled mosquitos") %>% 
-  group_by(Species) %>% 
-  summarize(
-    n = n()) %>% 
-  ungroup()
-
-wn_meta_sum_mosquitos %>%
-  mutate(Species = fct_reorder(Species, n)) %>% 
-  ggplot(aes(x = Species, y = n)) +
-  geom_point() +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")  
-
-```
-
-The above graphs demonstrate the variation in samples collected from either bird species or the pooled mosquito populations.  It is very interesting to note that most samples were collected from the American Crow.  Some literature suggests an overall high prevalence of West Nile Virus in corvids.  The American Crow is considered the third highest avian species for West Nile Virus prevalence behind Yellow-billed Magpies and Western Scrub-jays.  However, this data suggests American Crows have a higher prevalence of the virus.  This could be resulting from a disproportionate amount of American Crow samples submitted.
-
 ********************************************************************************
 
 # Genomics
-  
   The genomic data from Dr. Andersen's git hub page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome (see Wen et al. 2017 for a review). However, the nature of High Throughput Sequencing (HTS) technologies often results in significant variation between individual sequences due to poor quality DNA or sequencing error. So pre-processing of genomic data for quality control, and formatting is necessary before analysis may be conducted. 
   To start, consensus sequences were aligned using R package, DECIPHER, which scanned the sequences for k-mers (regions of genetic matching) that were 11 nucleotides long and aligned the reads to each other. ShortRead was then used to trim the poor-quality ends of the sequences from bp 31 to bp 10963. Many of the resulting sequences contained an obvious excess of *Ns* which are substitutes marking for either missing data or "any nucleotide". To rectify this variation of read quality, sequences were then filtered using the python script "Sequence_cleaner.py" available on [Biopython](https://biopython.org/wiki/Sequence_Cleaner). Once, to filter out any sequences with greater than 10% *N* content or shorter than 10317 bp long (568 sequences matched this criteria). And a second, more conservative, filter criteria that removed sequences with greater than 0% *Ns* and shorter than 10317 bp in length (157 sequences matched this criteria).   
 
@@ -239,15 +238,12 @@ wnv_clean
 writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
   
-
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
   To answer this question, a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
 
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically distinct* populations.  
   To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
 
-   
-   
 ```{r, eval = FALSE, message = FALSE, warning = FALSE, include = FALSE, results = "hide"}
 options(readr.show_progress = FALSE)
 ######Pre-Processing step for the Gein object that doens't need to be printed####
@@ -298,8 +294,7 @@ grid.arrange(wnv_pca_plot, county_map, nrow=1)
 Though there is some amount of overlap between the three populations, there is a clear amount of structure between them. Additionally, there appears to be a single individual from Kern county that does not group with the others. While this could be due to a single mutant strain, it is also very likely that this individual sample was sequenced from a vagrant host, or the sample itself was mislabeled. 
 
 ## Comparative Dendrogram
-  
-  Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
+Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
   To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitoes. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
   
 ```{r dendrogram, fig.height = 6, fig.width = 6}
