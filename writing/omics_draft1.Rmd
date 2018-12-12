@@ -351,7 +351,7 @@ dend <- assign_values_to_leaves_edgePar(dend, value = colors) # add colors
 plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
 
 View(metadataframe)
-1```
+```
   
   Colors: 
   
@@ -365,8 +365,10 @@ View(metadataframe)
 
 *******************************************************************************
 
-Challenges
-
-The genomic data was in FASTA format which includes only sequence ID information and the genetic data. This forced us to use python to filter our data before it could be analyzed since most R Packages that filter sequences need some sort of qulaity information emedded in the file as FASTQ format, or raw reads from the sequencers. In future, we will bear in mind that FASTA files are only useful to strict R users if read quality information is included. There are many crs codes for California, which presented a challenge when it came to mapping the infection data to CA geometry. This took a lot of guessing before Dr. Anderson was able to show me a function that can return the crs code being used for the CA geometry, and therefore could be used for the infection locations. 
-
+## Challenges
+  
+  It is difficult to analyze genomic data in general; every year the cost of sequencing goes down, so the number of studies conducted is skyrocketing quickly. This rapid change in type of study caused a backlog on the data analysis and bioinformatics side of the research. There is simply not a single, well-established pipeline for analyzing these studies. So, for those of us new to analyzing genomics in R (which is our entire group!) it is difficult to determine which packages are important and valuable. This project required degrees in googling because most of our time was spent searching the internet for a way to do what we wanted. Most of our difficulties stemmed from this. Ideally, as the field progresses, the work will become more open and collaborative and the pipelines will become more standardized to prevent this sort of difficulty in the future.
+  The genomic data was in FASTA format which includes only sequence ID information and the genetic data. This forced us to use python to filter our data before it could be analyzed since most R Packages that filter sequences need some sort of quality information emedded in the file as FASTQ format or raw reads from the sequencers. In the future, we will bear in mind that FASTA files are only useful to strict R users if read quality information is included. Additionally, further processing of these consensus sequences was difficult because the sequences were different lengths and included varying numbers of missing base pairs. Given that an alignment is necessary to create consensus sequences, we originally believed that we could proceed as though they were aligned; however, the tools we found to do this were not able to process the samples as they were. It was lucky that Rebecca was able to track down a pipeline that allowed us to align the sequences to each other so we could proceed with our analyses. 
+  There are many crs codes for California, which presented a challenge when it came to mapping the infection data to CA geometry. This took a lot of guessing before Dr. Anderson was able to show me a function that can return the crs code being used for the CA geometry, and therefore could be used for the infection locations. 
+  
 
