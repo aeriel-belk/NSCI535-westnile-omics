@@ -319,10 +319,11 @@ clust <- hclust(sdist, method = "ward.D2")
 dend <- as.dendrogram(clust)
 dend_data <- dendro_data(dend, type = 'rectangle')
   
-dend <- assign_values_to_leaves_edgePar(dend, value = colors, edgePar = "col") # add colors
+dend <- assign_values_to_leaves_edgePar(dend, value = colors) # add colors
 plot(dend, leaflab = 'none', horiz = TRUE, axes = FALSE)
 
-```
+View(metadataframe)
+1```
   
   Colors: 
   
