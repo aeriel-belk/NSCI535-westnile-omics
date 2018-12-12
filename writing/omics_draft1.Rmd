@@ -151,15 +151,10 @@ ca_wnv <- metaframe %>%
   mutate(longitude = as.numeric(longitude)) %>% 
   na.omit() 
 
-#Table summary of infections by season/species
-species_summary <- ca_wnv %>% 
-  group_by(species) %>% 
-  summarize(species_no = n())
+#Table summary of infections by season
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
   summarize(no_infections = n())
-kable(species_summary,
-      col.names = c("Species", "Number Infected"))
 kable(season_summary,
       col.names = c("Season", "Number of Cases"))
 
@@ -175,7 +170,7 @@ wnv_plot <- ggplot() +
   geom_sf(data = ca_counties, aes(fill = AWATER),
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season)) +
-  scale_fill_viridis_c() +
+  scale_fill_viridis_c(name = "Area of Water") +
   facet_wrap(.~season) +
   ggtitle("California West Nile Virus Infections") +
   xlab("Longitude") +
@@ -188,7 +183,6 @@ wnv_plot
 From the visual representations shown above it is clear that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occurring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most highly infected species collected in California over this time period. The question I was trying to answer by this plot is how likely is an infection going to occur in the summer near water? There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor.
 
 ```{r leaflet}
-
 #Leaflet graph
 popup_info <- paste0("<b>Species:</b>  ", 
                                   ca_wnv$species, "<br/>",
