@@ -1,7 +1,7 @@
 ---
-title: "West Nile Virus Genetic Diversity in California - DRAFT"
+title: "West Nile Virus Genetic Diversity in California"
 author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, & Kyle Root"
-date: "December 5, 2018"
+date: "December 12, 2018"
 output: pdf_document
 ---
 ```{r setup, include=FALSE}
@@ -116,15 +116,9 @@ The above graphs demonstrate the variation in samples collected from either bird
 
 ********************************************************************************
 
-<<<<<<< HEAD
 # Interactive map displaying seasonal infection by species  
 From the visual representations shown below it is clear that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occurring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most highly infected species collected in California over this time period. The question I was trying to answer by this plot is how likely is an infection going to occur in the summer near water? There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor.
 ```{r mapped_plot, echo=FALSE, message=FALSE, warning=FALSE, results = "hide", fig.height=4}
-=======
-#Interactive map displaying seasonal infection by species  
-
-```{r mapped_plot, echo=FALSE, message=FALSE, eval=TRUE}
->>>>>>> d6dca4fdfd3fc43e4d98ee93fc010682a36b812f
 
 #Tidy data for county map with infections by season
 metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
@@ -147,12 +141,19 @@ ca_wnv <- metaframe %>%
                fall = c("9", "10", "11"))) %>% 
   mutate(latitude = as.numeric(latitude)) %>% 
   mutate(longitude = as.numeric(longitude)) %>% 
-  na.omit() 
+  na.omit() %>% 
+  mutate(species = fct_lump(species,
+                                n = 4)) 
 
-#Table summary of infections by season
+#Table summary of infections by season/species
+species_summary <- ca_wnv %>% 
+  group_by(species) %>% 
+  summarize(species_no = n())
 season_summary <- ca_wnv %>% 
   group_by(season) %>% 
   summarize(no_infections = n())
+kable(species_summary,
+      col.names = c("Species", "Number Infected"))
 kable(season_summary,
       col.names = c("Season", "Number of Cases"))
 
@@ -168,7 +169,7 @@ wnv_plot <- ggplot() +
   geom_sf(data = ca_counties, aes(fill = AWATER),
           alpha = 0.5) +
   geom_sf(data = ca_wnv_sf, aes(color = season)) +
-  scale_fill_viridis_c(name = "Area of Water") +
+  scale_fill_viridis_c() +
   facet_wrap(.~season) +
   ggtitle("California West Nile Virus Infections") +
   xlab("Longitude") +
@@ -177,15 +178,8 @@ wnv_plot <- ggplot() +
   theme(axis.text.x = element_text(angle = 45)) 
 wnv_plot
 ```
-<<<<<<< HEAD
 ```{r leaflet, fig.height=3}
 
-=======
-
-From the visual representations shown above it is clear that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occurring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most highly infected species collected in California over this time period. The question I was trying to answer by this plot is how likely is an infection going to occur in the summer near water? There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor.
-
-```{r leaflet}
->>>>>>> d6dca4fdfd3fc43e4d98ee93fc010682a36b812f
 #Leaflet graph
 popup_info <- paste0("<b>Species:</b>  ", 
                                   ca_wnv$species, "<br/>",
@@ -216,12 +210,6 @@ saveWidget(wnv_interactive, 'mapca.html', selfcontained = TRUE)
 ```
 
  The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted. This interactive map allows a much greater amount of detail on collection site to be determined as well as gives good spatial orientation on infection sites. 
- 
-#California WNV mapped images
-```{r images, eval=TRUE}
-include_graphics("../data/images/ca_overview.png")
-include_graphics("../data/images/ca_wnv_popup.png")
-```
 
 When I created this plot the questions I was trying to answer were: does WNV infection occur in one species preferentially? Does this occur at a specific time of year? Does the amount of water available in an area affect this occurance? From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer (71%). There are quite a few infections occuring in the fall (20%), and almost none in the spring or winter. WNV infections are also clustered toward the southern portions of the state, while there are few indicences of infection in the northern portion of the state. The data also shows that the american crow (32%) is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
 
@@ -267,7 +255,7 @@ wnv_df <- add_rownames(wnv_df, "sequence_id")
 write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/data/wnv_test.csv")
 #### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv.
 ```
-```{r, echo = FALSE, results = "hide", fig.height = 2, fig.width = 7}
+```{r, echo = FALSE, results = "hide", fig.height = 2.5, fig.width = 7}
 options(readr.show_progress = FALSE)
 ##PCA
 wnv_df <- read.csv("../data/wnv_test1.csv")
