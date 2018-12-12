@@ -8,7 +8,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = FALSE)
 options(readr.show_progress = FALSE)
 ```
+#Introduction#
 
+The following project aims to characterize the genomic data of West Nile Virus infections. It took us about a few days to figure out how we were going to approach such a project, and a few more days before we found a viable dataset to use to accomplish our project goals. The data set found and used in this genomic project characterizing West Nile Virus our group used a data set published through Dr. Andersen github: https://github.com/andersen-lab/west-nile. Once our group was assigned found usable data we developed an overarching question that we wanted our project to answer: How do infection rates and genetic structure vary within West Nile Virus in California? We now had a very large dataset with information on species, location, date, and sequence that could be used to answer a small set of questions we proposed to answer for this project. 
 ```{r libraries}
 library(tidyverse)
 library(ggthemes)
@@ -56,7 +58,8 @@ library(DECIPHER)
 ```
 
 # Sample Collection
-Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__ in multiple locations with varying degrees of urbanization.  Samples appear to have been collected by the researchers or submitted by other parties.  Metadata reflecting the amount of samples collected from each county and each species, either avians or pooled mosquitoes, was examined to determine the potential for bias. 
+
+Samples were collected from both bird tissues __(n = 222)__ and pooled mosquito populations __(n = 419)__ in multiple locations with varying degrees of urbanization.  Samples appear to have been collected by the researchers or submitted by other parties.  Metadata reflecting the amount of samples collected from each county and each species, either avians or pooled mosquitoes, was examined to determine the potential for bias. Data was collected from 2004 to 2017.
 
 ```{r county_metadata, fig.height = 5.5, fig.width = 5}
 wn_meta_filtered <- read.csv("../data/metadata/metadata.csv") %>% 
@@ -98,97 +101,6 @@ wn_meta_sum_species %>%
 
 ```
   
-********************************************************************************
-# Interactive map displaying seasonal infection by species  
-
-
-```{r mapped_plot}
-
-#Tidy data for county map with infections by season
-metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
-
-metaframe <- read_csv("../data/metadata/metadata.csv")
-metaframe <- metaframe %>% 
-  rename_all(tolower)
-
-ca_wnv <- metaframe %>% 
-  select("species", "collection date",
-           "county", "latitude", "longitude") %>% 
-  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
-  separate(col = collection_date, 
-           into = c("month", "day", "year"),
-           sep = "/") %>% 
-  mutate(month = factor(month),
-         season = fct_collapse(month,
-               winter = c("12", "1", "2"),
-               spring = c("3", "4", "5"),
-               summer = c("6", "7", "8"),
-               fall = c("9", "10", "11"))) %>% 
-  mutate(latitude = as.numeric(latitude)) %>% 
-  mutate(longitude = as.numeric(longitude)) %>% 
-  na.omit() %>% 
-  mutate(species = fct_lump(species,
-                                n = 4))
-
-#Table summary of infections by season/species
-species_summary <- ca_wnv %>% 
-  group_by(species) %>% 
-  summarize(species_no = n())
-season_summary <- ca_wnv %>% 
-  group_by(season) %>% 
-  summarize(no_infections = n())
-kable(species_summary,
-      col.names = c("Species", "Number Infected"))
-kable(season_summary,
-      col.names = c("Season", "Number of Cases"))
-
-#Creating CA sf boundaries
-ca_wnv_sf <- st_as_sf(ca_wnv, 
-                      coords = c("longitude", "latitude"),
-                      crs = 4269)
-ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
-co_tracts <- tracts(state = 06, cb = TRUE, class = "sf")
-
-#Plot to show relation of infections to water area 
-ggplot() +
-  geom_sf(data = ca_counties, aes(fill = AWATER),
-          alpha = 0.5) +
-  geom_sf(data = ca_wnv_sf, aes(color = season,
-                                shape = species)) +
-  scale_fill_viridis_c(name = "Area of Water") +
-  facet_wrap(.~season) +
-  ggtitle("California West Nile Virus Infections") +
-  xlab("Longitude") +
-  ylab("Latitude") +
-  scale_x_continuous() +
-  theme(axis.text.x = element_text(angle = 45))
-
-#Leaflet graph
-popup_info <- paste0("<b>Species:</b>  ", 
-                                  ca_wnv$species, "<br/>",
-                                  "<b>Season:</b>  ",
-                                  ca_wnv$season, "<br/>",
-                                  "<b>Year:</b>  ",
-                                  ca_wnv$year)
-season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
-                             ca_wnv$season)
-
-leaflet() %>% 
-  addProviderTiles("Esri.NatGeoWorldMap") %>% 
-  addPolygons(data = ca_counties,
-              group = "tracts") %>% 
-  addCircleMarkers(data = ca_wnv, radius = 2,
-                   lng = ~ longitude, lat = ~ latitude,
-                   popup = popup_info,
-                   color = season_pallet(ca_wnv$season),
-                   group = "infections",
-                   clusterOptions = markerClusterOptions()) %>%
-  addLayersControl(baseGroups = c("Base Map"),
-                   overlayGroups = c("Tracts", "Infections"))
-
-```
-  
-  From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occuring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
 
 ```{r mosquito_metadata, fig.height = 2, fig.width = 5}
 wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
@@ -212,10 +124,133 @@ The above graphs demonstrate the variation in samples collected from either bird
 
 ********************************************************************************
 
-# Genomics
+#Interactive map displaying seasonal infection by species  
+
+```{r mapped_plot, echo=FALSE, message=FALSE, warning=FALSE}
+
+#Tidy data for county map with infections by season
+metadata_url <- paste0("https://raw.githubusercontent.com/aeriel-belk/NSCI535-westnile-omics/master/metadata/metadata.csv")
+metaframe <- read_csv("../data/metadata/metadata.csv")
+metaframe <- metaframe %>% 
+  rename_all(tolower)
+
+ca_wnv <- metaframe %>% 
+  select("species", "collection date",
+           "county", "latitude", "longitude") %>% 
+  rename_all(funs(str_replace(., "\\s", "_"))) %>% 
+  separate(col = collection_date, 
+           into = c("month", "day", "year"),
+           sep = "/") %>% 
+  mutate(month = factor(month),
+         season = fct_collapse(month,
+               winter = c("12", "1", "2"),
+               spring = c("3", "4", "5"),
+               summer = c("6", "7", "8"),
+               fall = c("9", "10", "11"))) %>% 
+  mutate(latitude = as.numeric(latitude)) %>% 
+  mutate(longitude = as.numeric(longitude)) %>% 
+  na.omit() %>% 
+  mutate(species = fct_lump(species,
+                                n = 4)) 
+
+#Table summary of infections by season/species
+species_summary <- ca_wnv %>% 
+  group_by(species) %>% 
+  summarize(species_no = n())
+season_summary <- ca_wnv %>% 
+  group_by(season) %>% 
+  summarize(no_infections = n())
+kable(species_summary,
+      col.names = c("Species", "Number Infected"))
+kable(season_summary,
+      col.names = c("Season", "Number of Cases"))
+
+#Creating CA sf boundaries
+ca_wnv_sf <- st_as_sf(ca_wnv, 
+                      coords = c("longitude", "latitude"),
+                      crs = 4269)
+ca_counties <- counties(state = 06, cb = TRUE, class = "sf")
+co_tracts <- tracts(state = 06, cb = TRUE, class = "sf")
+
+#Plot to show relation of infections to water area 
+wnv_plot <- ggplot() +
+  geom_sf(data = ca_counties, aes(fill = AWATER),
+          alpha = 0.5) +
+  geom_sf(data = ca_wnv_sf, aes(color = season)) +
+  scale_fill_viridis_c() +
+  facet_wrap(.~season) +
+  ggtitle("California West Nile Virus Infections") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  scale_x_continuous() +
+  theme(axis.text.x = element_text(angle = 45)) 
+wnv_plot
+```
+
+From the visual representations shown above it is clear that a vast majority of West Nile Virus infections occur in the summer. Surprisingly there are quite a few infections occurring in the fall, and almost none in the spring or winter. The data also shows that the american crow is by far the most highly infected species collected in California over this time period. The question I was trying to answer by this plot is how likely is an infection going to occur in the summer near water? There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor.
+
+```{r leaflet}
+
+#Leaflet graph
+popup_info <- paste0("<b>Species:</b>  ", 
+                                  ca_wnv$species, "<br/>",
+                                  "<b>Season:</b>  ",
+                                  ca_wnv$season, "<br/>",
+                                  "<b>Year:</b>  ",
+                                  ca_wnv$year)
+season_pallet <- colorFactor(brewer.pal(4, "Dark2"),
+                             ca_wnv$season)
+
+wnv_interactive <- leaflet() %>% 
+  addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addPolygons(data = ca_counties,
+              group = "Tracts") %>% 
+  addCircleMarkers(data = ca_wnv, radius = 2,
+                   lng = ~ longitude, lat = ~ latitude,
+                   popup = popup_info,
+                   color = season_pallet(ca_wnv$season),
+                   group = "Infections",
+                   clusterOptions = markerClusterOptions()) %>%
+  addLegend(pal = season_pallet, values = ca_wnv$season,
+            opacity = 0.5) %>% 
+  addLayersControl(baseGroups = c("Base Map"),
+                   overlayGroups = c("Tracts", "Infections"),
+                   options = layersControlOptions(collapsed = TRUE))
+wnv_interactive
+saveWidget(wnv_interactive, 'mapca.html', selfcontained = TRUE)
+```
+
+ The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted. This interactive map allows a much greater amount of detail on collection site to be determined as well as gives good spatial orientation on infection sites. 
+
+```{r mosquito_metadata, fig.height = 2, fig.width = 5}
+wn_meta_sum_mosquitos <- wn_meta_filtered %>% 
+  filter(Sample.type == "Pooled mosquitos") %>% 
+  group_by(Species) %>% 
+  summarize(
+    n = n()) %>% 
+  ungroup()
+
+wn_meta_sum_mosquitos %>%
+  mutate(Species = fct_reorder(Species, n)) %>% 
+  ggplot(aes(x = Species, y = n)) +
+  geom_point() +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Samples collected by mosquito species", x = NULL, y = "# of samples")    
+```
+
+The above graphs demonstrate the variation in samples collected from either bird species or the pooled mosquito populations.  It is very interesting to note that most samples were collected from the American Crow.  Some literature suggests an overall high prevalence of West Nile Virus in corvids.  The American Crow is considered the third highest avian species for West Nile Virus prevalence behind Yellow-billed Magpies and Western Scrub-jays.  However, this data suggests American Crows have a higher prevalence of the virus.  This could be resulting from a disproportionate amount of American Crow samples submitted.
   
-  The genomic data from Dr. Andersen's git hub page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome (see Wen et al. 2017 for a review). However, the nature of High Throughput Sequencing (HTS) technologies often results in significant variation between individual sequences due to poor quality DNA or sequencing error. So pre-processing of genomic data for quality control, and formatting is necessary before analysis may be conducted. 
-  To start, consensus sequences were aligned using R package, DECIPHER, which scanned the sequences for k-mers (regions of genetic matching) that were 11 nucleotides long and aligned the reads to each other. ShortRead was then used to trim the poor-quality ends of the sequences from bp 31 to bp 10963. Many of the resulting sequences contained an obvious excess of *Ns* which are substitutes marking for either missing data or "any nucleotide". To rectify this variation of read quality, sequences were then filtered using the python script "Sequence_cleaner.py" available on [Biopython](https://biopython.org/wiki/Sequence_Cleaner). Once, to filter out any sequences with greater than 10% *N* content or shorter than 10317 bp long (568 sequences matched this criteria). And a second, more conservative, filter criteria that removed sequences with greater than 0% *Ns* and shorter than 10317 bp in length (157 sequences matched this criteria).   
+When I created this plot the questions I was trying to answer were: does WNV infection occur in one species preferentially? Does this occur at a specific time of year? Does the amount of water available in an area affect this occurance? From the visual representations shown above it is clearn that a vast majority of West Nile Virus infections occur in the summer (71%). There are quite a few infections occuring in the fall (20%), and almost none in the spring or winter. WNV infections are also clustered toward the southern portions of the state, while there are few indicences of infection in the northern portion of the state. The data also shows that the american crow (32%) is by far the most higly infected species collected in California over this time period. There is a somewhat clustered amount of infections around areas of higher water concentration, but I would not say this is a strong correlating factor. The interactive graph above has color coordinated points at locations of infections with popup information on species and year if wanted.
+
+
+********************************************************************************
+
+# Genomics
+
+  
+  The genomic data from Dr. Andersen's git hub page included 649 consensus sequences of West Nile Viral DNA that has been isolated from multiple species of birds and mosquitoes through amplicon-based sequencing which sequences highly specific regions of the target genome. However, pre-processing of the genomic data for quality control and formatting was necessary before analysis could be conducted. 
+  To start, consensus sequences were aligned using R package, DECIPHER, which scanned the sequences for k-mers (regions of genetic matching) that were 11 nucleotides long and aligned the reads to each other. ShortRead was then used to trim the poor-quality ends of the sequences from bp 31 to bp 10963. Many of the resulting sequences contained an obvious excess of *Ns* which are substitutes marking for either missing data or "any nucleotide". To rectify this variation of read quality, sequences were then filtered using the python script "Sequence_cleaner.py" available on [Biopython](https://biopython.org/wiki/Sequence_Cleaner). A preliminary filter removed sequences with greater than 10% *N* content or shorter than 10317 bp long (568 sequences matched this criteria). A second, more conservative, filter criteria removed sequences with greater than 0% *Ns* and shorter than 10317 bp in length (157 sequences matched this criteria).  
 
 ```{r, eval = FALSE, include = FALSE, results = "hide"}
 options(readr.show_progress = FALSE)
@@ -239,15 +274,9 @@ wnv_clean
 writeXStringSet(wnv_clean,file="../data/fasta/wnv_clean.fas",format="fasta") #Write output to fasta for further cleaning.  
 ```
   
-
   Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically disctinct* populations.  
-  To answer this question, a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
+  To answer this question, a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. We then analyzed this polymorphic data set using a Principle Components Analysis (PCA) and plotted using ggplot and ggfortify. The purpose of the PCA is to represent the amount of genetic diversity represented by each principle component (axes of measure, which is the genetic site of variation in this case). Only the most conservative dataset could be used for this analysis as PCAs cannot handle missing or N values. If West Nile virus is panmictic across all of California due to high mobility of the virus preventing divergence, we would expect to see overlap in our three populations with all points grouping together on the axes.   
 
-  Of the remaining 157 sequences that matched out filtering criteria, 133 were from samples collected in Sacramento, Kern, and San Diego counties. These counties conveniently reside along a large latitudinal gradient, which allows us to ask: "How closely related are these geographically distinct populations?" Considering that West Nile Virus is a vector borne disease that infects highly mobile taxa such as birds and mosquitoes, it would be interesting to determine if they may be described as one panmictic group or three *genetically distinct* populations.  
-  To answer this question,a PCA analysis was performed on the Sacramento, Kern, and San Diego samples by first converting our filtered fasta files to a geid object using the adegenet and dartR packages, so that only the veritable regions of the sequences were conserved. This polymorphic data set was then run through a PCA and plotted using ggplot and ggfortify. 
-
-   
-   
 ```{r, eval = FALSE, message = FALSE, warning = FALSE, include = FALSE, results = "hide"}
 options(readr.show_progress = FALSE)
 ######Pre-Processing step for the Gein object that doens't need to be printed####
@@ -295,11 +324,10 @@ grid.arrange(wnv_pca_plot, county_map, nrow=1)
 
 ```
 
-Though there is some amount of overlap between the three populations, there is a clear amount of structure between them. Additionally, there appears to be a single individual from Kern county that does not group with the others. While this could be due to a single mutant strain, it is also very likely that this individual sample was sequenced from a vagrant host, or the sample itself was mislabeled. 
+Above we can see our plotted PCA values, alongside a map of California highlighting Kern, Sacramento, and San Diego counties matched by color to the PCA groups. Though there is some amount of overlap between the three populations, there is a clear amount of structure between them as seen by the three elipses. The lines are very thin elipses showing tight grouping (genetic similiarity) of the points (each point represents an individual sequence. Additionally, there appears to be a single individual from Kern county that does not group with the others. While this could be due to a single mutant strain, it is also very likely that this individual sample was sequenced from a vagrant host, or the sample itself was mislabeled. 
 
 ## Comparative Dendrogram
-  
-  Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
+Consensus sequences were obtained from the Andersen lab github. These sequences, collected from a variety of sources including several bird and mosquito species, were aligned against each other so we could determine point mutation differences in the sequences that could be attributed to distinct strains of West Nile Virus. The  hypothesize investigated here is that sequences isolated from different organisms may be phylogenetically different. This is likely based on general knowledge of virus evolution. In general, evolutionary changes occur in response to pressures from the host immune system or other environmental effects. Thus, it is likely that strains that begin to differentiate in a bird may be different than those that begin to differentiate in mosquitoes.
   To investigate this, the individual species of birds were categorized into four larger groups: corvids, hawks, songbirds, and mosquitoes. Then, the aligned strains were hierarchically clustered based on Hamming distance using the R package biostrings. These clusters were visualized as a colored dendrogram to evaluate whether the sequences from individual species groups were more similar to each other than others.
   
 ```{r dendrogram, fig.height = 6, fig.width = 6}
@@ -334,10 +362,11 @@ View(metadataframe)
   
   Based on this visualization, it is clear that the sequences did cluster by origin species. There were a greater number of corvid and mosquito samples, so these are predominant on the plot, making it difficult to interpret differences in other species. Interestingly, the first break separated a group of corvids from the other species, though not all of the corvid strains were different at this break. The lower levels of the plot further separate the strains. The mosquitoes all cluster together in the center of the plot, which was expected. The small group of hawk species also clustered together, separated at lower levels from the others. The songbird group is also clustered separately, but appear to be more closely related to corvids than mosquitoes, which is interesting. A deeper understanding of the relatedness of West Nile Virus between species might illuminate transmission patterns in the disease that could help researchers contain the illness and prevent further spread.
   
+
 *******************************************************************************
 
-Literature Cited 
-Wen C, Wu L, Qin Y, Van Nostrand JD, Ning D, Sun B, Xue K, Liu F, Deng Y, Liang Y, Zhou J.2017. Evaluation of the reproducibility of amplicon sequencing with Illumina MiSeq platform. PLoS ONE 12(4): e0176716. https://doi.org/10.1371/journal.pone.0176716
-  
+Challenges
+
+The genomic data was in FASTA format which includes only sequence ID information and the genetic data. This forced us to use python to filter our data before it could be analyzed since most R Packages that filter sequences need some sort of qulaity information emedded in the file as FASTQ format, or raw reads from the sequencers. In future, we will bear in mind that FASTA files are only useful to strict R users if read quality information is included. There are many crs codes for California, which presented a challenge when it came to mapping the infection data to CA geometry. This took a lot of guessing before Dr. Anderson was able to show me a function that can return the crs code being used for the CA geometry, and therefore could be used for the infection locations. 
 
 
