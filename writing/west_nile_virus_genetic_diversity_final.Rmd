@@ -1,7 +1,7 @@
 ---
-title: "West Nile Virus Genetic Diversity in California - DRAFT"
+title: "West Nile Virus Genetic Diversity in California"
 author: "Aeriel Belk, Amanda Walz, Rebecca Cheek, & Kyle Root"
-date: "December 5, 2018"
+date: "December 12, 2018"
 output: pdf_document
 ---
 ```{r setup, include=FALSE}
@@ -255,7 +255,7 @@ wnv_df <- add_rownames(wnv_df, "sequence_id")
 write.csv(wnv_df, "C:/Users/Rebecca/Desktop/Homework 5/NSCI535-westnile-omics/data/wnv_test.csv")
 #### select for just the Kern, Sacramento, and San Diego samples in Excel for wnv_test1.csv.
 ```
-```{r, echo = FALSE, results = "hide", fig.height = 2, fig.width = 7}
+```{r, echo = FALSE, results = "hide", fig.height = 2.5, fig.width = 7}
 options(readr.show_progress = FALSE)
 ##PCA
 wnv_df <- read.csv("../data/wnv_test1.csv")

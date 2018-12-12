@@ -7,6 +7,7 @@ wn_meta_filtered <- read.csv("metadata/metadata.csv") %>%
   select(Scripps.ID, Species, Sample.type, Collection.date, County, Latitude, Longitude)
 
 wn_meta_sum_county <- wn_meta_filtered %>% 
+  mutate(County = fct_lump(County, n = 4)) %>%
   group_by(County) %>% 
   summarize(
     n = n()) %>% 
@@ -18,7 +19,7 @@ wn_meta_sum_county %>%
   geom_point() +
   coord_flip() +
   theme_minimal() +
-  labs(title = "Samples collected by county", x = NULL, y = "# of samples")
+  labs(title = "Samples collected by California county", x = NULL, y = "# of samples")
 
 wn_meta_sum_species <- wn_meta_filtered %>% 
   filter(Sample.type == "Tissue") %>% 
